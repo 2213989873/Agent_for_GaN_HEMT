@@ -1,0 +1,16 @@
+# 环境验证与早期学习
+openai>=1.40
+python-dotenv>=1.0
+
+# Phase 1: Agent 框架
+langgraph
+langchain-openai
+
+# Phase 1-2: MCP
+fastmcp
+
+# 数据处理
+numpy
+pandas
+matplotlib
+pydantic>=2
