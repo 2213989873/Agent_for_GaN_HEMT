@@ -52,7 +52,8 @@ load_data → analyze_data → init_params → extract_dc → extract_cv → ext
 
 ## 7. 编码约定
 
+- 开发环境：**远程 Linux 服务器（A100，VS Code Remote-SSH）**，服务器上仓库路径 `~/projects/gan-hemt-agent`；GitHub 私有仓库为同步中枢
 - Python 3.10+；依赖见 `requirements.txt`；一律在 `.venv` 虚拟环境中运行
-- API key 只放 `.env`（已被 git 忽略），**绝不写进代码**
+- API key 只放 `.env`（已被 git 忽略），**绝不写进代码**；每台机器各自重建 `.env`
 - 日志与 checkpoint 写 `runs/`；数据写 `data/`（均不入 git）
 - 每个阶段完成时更新本文件第 5 节
