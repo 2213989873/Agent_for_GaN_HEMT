@@ -32,11 +32,11 @@ load_data → analyze_data → init_params → extract_dc → extract_cv → ext
 
 ## 5. 当前状态与下一步
 
-- **当前阶段**：Phase 1 进行中（9/14 提前启动）
-- **已完成**：仓库骨架；服务器 conda 环境 `gan-agent`；DeepSeek API 验证 ✅；GitHub 私有仓库备份链 ✅（同步走"同步命令.txt"粘贴机制）；任务 01 LangGraph 入门 ✅；任务 02 FastMCP 最小通信 ✅；任务 03 器件知识速成 ✅（I-V 曲线标注合格，Vth 切线法教学点已讲）
-- **进行中**：任务 04 · 手写 function calling 循环（见 `docs/任务卡-04-手写function-calling循环.md`）
+- **当前阶段**：Phase 2 启动（Phase 1 已于 9/15 提前收官：任务 01 LangGraph ✅ / 02 FastMCP ✅ / 03 器件知识 ✅ / 04 手写 function calling 循环 ✅）
+- **基建**：服务器 conda 环境 `gan-agent`；GitHub 私有仓备份链 ✅；文档同步走"同步命令.txt"粘贴机制
+- **进行中**：任务 05 · 仿真环境搭建 ngspice + OpenVAF + ASM-HEMT VA 模型（见 `docs/任务卡-05-仿真环境搭建.md`）
 - **待办**：确认官方测试日日期（需本人查赛题 Q&A）
-- **下一步**：Phase 2 · 用 ngspice + 开源 ASM-HEMT 模型合成训练数据，搭 mock MCP server
+- **下一步**：任务 06 · 用 ASM-HEMT 合成 2 个"性格不同"的虚拟器件数据集
 - **阶段定义与 Checkpoint**：见 `docs/总体规划.md` 第 2 节，完成一个勾一个
 
 ## 6. 目录与关键文档
