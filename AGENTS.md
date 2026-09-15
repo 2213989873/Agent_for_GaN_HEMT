@@ -32,9 +32,11 @@ load_data → analyze_data → init_params → extract_dc → extract_cv → ext
 
 ## 5. 当前状态与下一步
 
-- **当前阶段**：Phase 0（立项准备，9/14–9/20）
-- **已完成**：仓库骨架、环境验证脚本 `examples/00_hello_llm.py`、名词手册、知识表模板
-- **下一步**：Phase 1（9/21 起）——LangGraph 官方教程 demo × 2；FastMCP 最小 server/client；器件最小知识清单
+- **当前阶段**：Phase 1 进行中（9/14 提前启动）
+- **已完成**：仓库骨架；服务器 conda 环境 `gan-agent`；DeepSeek API 验证 ✅；任务 01 LangGraph 入门 ✅；任务 02 FastMCP 最小通信 ✅（server/client 跑通，MCP 发现机制已掌握）
+- **进行中**：任务 03 · 器件知识速成 + 第一次看懂 I-V 曲线（见 `docs/任务卡-03-器件知识速成.md`，讲义 `docs/器件知识速成.md`，数据 `examples/sample_iv.csv`）
+- **待办**：确认官方测试日日期（需本人查赛题 Q&A）；配置 GitHub 私有仓库同步
+- **下一步**：任务 04 · 用 DeepSeek function calling 手写 Agent 循环（不依赖框架）；之后进入 Phase 2 造数据
 - **阶段定义与 Checkpoint**：见 `docs/总体规划.md` 第 2 节，完成一个勾一个
 
 ## 6. 目录与关键文档
