@@ -28,8 +28,17 @@ from src.eval.metrics import nrmse  # noqa: E402
 from src.tools.sim_tools import run_transfer  # noqa: E402
 
 load_dotenv(ROOT / ".env")
+
+# WSL 网络坑（2026-09-18 实测）：shell 里的 127.0.0.1:7897 代理是 Windows 主机的，
+# WSL 的 127.0.0.1 是自己——代理变量在 WSL 里指向虚空，SSL 握手必超时。
+# DeepSeek 直连可通（curl 实测 0.16s 返回 401），摘掉代理变量走直连。
+for _k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY",
+           "all_proxy", "ALL_PROXY"):
+    os.environ.pop(_k, None)
+
 client = OpenAI(base_url="https://api.deepseek.com",
-                api_key=os.getenv("DEEPSEEK_API_KEY"))
+                api_key=os.getenv("DEEPSEEK_API_KEY"),
+                timeout=60)
 
 SAMPLE_VG = [-4, -3, -2.5, -2, -1.5, -1, -0.5, 0, 1, 2]  # 给 LLM 看的采样点
 CONVERGE_TOL = 0.02  # NRMSE < 2% 判收敛
