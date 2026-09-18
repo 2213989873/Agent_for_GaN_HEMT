@@ -54,6 +54,7 @@ BOUND_TOL = 1e-3                  # 触优化边界判定容差（相对）
 class S(TypedDict):
     target_vg: np.ndarray
     target_id: np.ndarray
+    sim_fn: object          # 仿真函数 (params: dict, tag: str) -> Id 数组（任务卡12 泛化）
     params_space: list      # 当前提取参数名
     values: dict            # 当前参数值（初值/精修结果）
     rmse: float             # 当前 NRMSE
@@ -97,7 +98,7 @@ def optimize(state: S) -> dict:
     scale = np.abs(tgt).max()
 
     def resid(x):
-        _, idv = run_transfer_params(dict(zip(space, x)), tag=f"qa{state['n_retry']}")
+        idv = state["sim_fn"](dict(zip(space, x)), tag=f"qa{state['n_retry']}")
         return (idv - tgt) / scale
 
     x0 = np.array([state["values"][p] for p in space])

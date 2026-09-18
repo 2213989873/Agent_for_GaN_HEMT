@@ -121,3 +121,32 @@ wrdata transfer_trialP_{tag}.csv i(vd)
         raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
     d = np.loadtxt(SIM_DIR / f"transfer_trialP_{tag}.csv")
     return d[:, 0], -d[:, 1]
+
+
+def run_output_params(params: dict, tag: str) -> np.ndarray:
+    """输出特性版：嵌套 dc（Vd 0→12 步0.1 × Vg -1.5→1.5 步0.5，847 点），
+    与 dc_output_yi.sp 同协议。dt 接地（等温）；含 rontr1 自动开 trapmod=2。
+    返回 Id 一维数组（847 点，取正）。任务卡12 Part B。"""
+    card = " ".join(f"{k}={v}" for k, v in params.items())
+    trap = " trapmod=2" if "rontr1" in params else ""
+    netlist = f"""* agent 试算(输出特性) #{tag}: {card}
+Vd d 0 0
+Vg g 0 0
+N1 d g 0 0 0 trialmod
+.model trialmod asmhemt (rdsmod=1{trap} {card})
+
+.control
+pre_osdi {OSDI_REL}
+dc Vd 0 12 0.1 Vg -1.5 1.5 0.5
+wrdata output_trialP_{tag}.csv i(vd)
+.endc
+.end
+"""
+    sp = SIM_DIR / f"output_trialP_{tag}.sp"
+    sp.write_text(netlist, encoding="utf-8")
+    r = subprocess.run([NGSPICE, "-b", sp.name], cwd=SIM_DIR,
+                       capture_output=True, text=True, timeout=180)
+    if r.returncode != 0:
+        raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
+    d = np.loadtxt(SIM_DIR / f"output_trialP_{tag}.csv")
+    return -d[:, 1]

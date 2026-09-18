@@ -17,12 +17,21 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 from src.agent.qa_loop import S, build  # noqa: E402
+from src.tools.sim_tools import run_transfer_params  # noqa: E402
 
-d = np.loadtxt(ROOT / "data" / "sim" / "transfer_yi.csv")
+# 任务卡12：同一套代码连跑双器件，只换目标文件
+# 用法：python src/pipeline/run_qa.py [jia|yi]（默认 yi）
+dev = sys.argv[1] if len(sys.argv) > 1 else "yi"
+TRUTH = {
+    "jia": "voff=-2.0, u0=170e-3（无陷阱——expand 不应触发）",
+    "yi": "voff=-2.2, u0=150e-3, rontr1=-1.0",
+}
+d = np.loadtxt(ROOT / "data" / "sim" / f"transfer_{dev}.csv")
 
 init: S = {
     "target_vg": d[:, 0],
     "target_id": -d[:, 1],
+    "sim_fn": lambda p, t: run_transfer_params(p, t)[1],
     "params_space": ["voff", "u0"],     # 只带两参数起步
     "values": {"voff": -2.0, "u0": 170e-3},
     "rmse": None,
@@ -34,10 +43,10 @@ init: S = {
 
 final = build().invoke(init)
 
-print("===== physics_qa 闭环过程 =====")
+print(f"===== physics_qa 闭环过程（器件：{dev}）=====")
 for line in final["log"]:
     print(line)
 print(f"\n最终参数空间: {final['params_space']}")
 print("最终参数: " + " ".join(f"{p}={v:.5g}" for p, v in final["values"].items()))
 print(f"最终 NRMSE = {final['rmse']:.4%}")
-print("（真值 voff=-2.2, u0=150e-3, rontr1=-1.0）")
+print(f"（真值 {TRUTH[dev]}）")
