@@ -40,14 +40,17 @@ QA_RULES = {                      # 物理合理区间（含触发值，超出=�
     "voff": (-4.0, -0.5),         # D-mode 阈值电压 (V)
     "u0": (100e-3, 250e-3),       # GaN 低场迁移率 (m²/V·s)
     "rontr1": (-3.0, 1.0),        # 陷阱耦合强度
+    "rth0": (0.5, 100.0),         # 热阻 (K/W)，GaN HEMT 典型 1~50
 }
 OPT_BOUNDS = {                    # 优化器边界（比 QA 宽，给探索留余地）
     "voff": (-3.0, -1.0),
     "u0": (0.05, 0.30),
     "rontr1": (-3.0, 1.0),
+    "rth0": (0.1, 100.0),
 }
-DEFAULTS = {"voff": -2.0, "u0": 170e-3, "rontr1": 0.0}
-PARAM_ENTRY_ORDER = [["voff", "u0"], ["rontr1"]]  # 参数族进场顺序（知识表1）
+DEFAULTS = {"voff": -2.0, "u0": 170e-3, "rontr1": 0.0, "rth0": 5.0}
+PARAM_ENTRY_ORDER = [["voff", "u0"], ["rontr1"], ["rth0"]]  # 参数族进场顺序（知识表1）
+RMSE_TARGET = 0.01                # 任务卡13：expand 第二触发器的 NRMSE 阈值
 BOUND_TOL = 1e-3                  # 触优化边界判定容差（相对）
 
 
@@ -130,16 +133,30 @@ def physics_qa(state: S) -> dict:
             "log": state["log"] + [f"physics_qa: {'✅ 通过' if qa_pass else '❌ 驳回——' + '；'.join(violations)}"]}
 
 
+def _has_remaining(state: S) -> bool:
+    """是否还有未进场的参数族。"""
+    return any(p not in state["params_space"]
+               for fam in PARAM_ENTRY_ORDER for p in fam)
+
+
 def route_after_qa(state: S) -> str:
+    """双触发器（任务卡13）：
+    触发器1 QA 驳回——先换初值重调（<2次），再撞天花板扩空间；
+    触发器2 QA 通过但 NRMSE 未达标——直接扩空间（还有族可扩的话）。"""
     if state["qa_pass"]:
-        return END
+        if state["rmse"] is not None and state["rmse"] < RMSE_TARGET:
+            return END
+        return "expand" if _has_remaining(state) else END  # 触发器2
     if state["n_retry"] < 2:
         return "coarse"          # 先换初值重调（兜底）
-    return "expand"              # 反复驳回=撞天花板，新参数族进场（治本）
+    return "expand" if _has_remaining(state) else END      # 触发器1
 
 
 def expand(state: S) -> dict:
-    """扩提取空间：按知识表1的进场顺序补下一族参数。"""
+    """扩提取空间：按知识表1的进场顺序补下一族参数。
+    log 区分触发器（任务卡13）：QA 驳回撞墙 vs NRMSE 未达标追优。"""
+    reason = ("NRMSE 未达标，扩空间追优"
+              if state["qa_pass"] else "QA 反复驳回=撞天花板")
     space = list(state["params_space"])
     for fam in PARAM_ENTRY_ORDER:
         new = [p for p in fam if p not in space]
@@ -149,7 +166,7 @@ def expand(state: S) -> dict:
             for p in new:
                 values[p] = DEFAULTS[p]
             return {"params_space": space, "values": values, "n_retry": 0,
-                    "log": state["log"] + [f"expand: QA 反复驳回 → 新参数族进场 {new}（撞天花板判据）"]}
+                    "log": state["log"] + [f"expand: {reason} → 新参数族进场 {new}"]}
     return {"log": state["log"] + ["expand: 无更多参数族可扩，停"]}
 
 

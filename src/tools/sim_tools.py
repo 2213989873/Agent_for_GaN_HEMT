@@ -150,3 +150,36 @@ wrdata output_trialP_{tag}.csv i(vd)
         raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
     d = np.loadtxt(SIM_DIR / f"output_trialP_{tag}.csv")
     return -d[:, 1]
+
+
+def run_output_selfheat_params(params: dict, tag: str) -> np.ndarray:
+    """含自热的输出特性版：协议同 dc_output_yi.sp（847 点嵌套扫描）。
+    含 rth0 → dt 浮地 + shmod=1（自热生效）；不含 → dt 接地（等温）。
+    含 rontr1 自动开 trapmod=2。任务卡13。"""
+    card = " ".join(f"{k}={v}" for k, v in params.items())
+    trap = " trapmod=2" if "rontr1" in params else ""
+    if "rth0" in params:
+        heat, dt_node = " shmod=1", "dt"
+    else:
+        heat, dt_node = "", "0"
+    netlist = f"""* agent 试算(输出特性+自热) #{tag}: {card}
+Vd d 0 0
+Vg g 0 0
+N1 d g 0 0 {dt_node} trialmod
+.model trialmod asmhemt (rdsmod=1{trap}{heat} {card})
+
+.control
+pre_osdi {OSDI_REL}
+dc Vd 0 12 0.1 Vg -1.5 1.5 0.5
+wrdata output_sh_trialP_{tag}.csv i(vd)
+.endc
+.end
+"""
+    sp = SIM_DIR / f"output_sh_trialP_{tag}.sp"
+    sp.write_text(netlist, encoding="utf-8")
+    r = subprocess.run([NGSPICE, "-b", sp.name], cwd=SIM_DIR,
+                       capture_output=True, text=True, timeout=180)
+    if r.returncode != 0:
+        raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
+    d = np.loadtxt(SIM_DIR / f"output_sh_trialP_{tag}.csv")
+    return -d[:, 1]
