@@ -24,8 +24,10 @@ init: S = {
     "voff": -1.0,       # 初始猜测（故意偏 1V）
     "rmse_hist": [],
     "voff_hist": [],
+    "best_voff": None,
+    "best_rmse": None,
     "iter": 0,
-    "max_iter": 6,
+    "max_iter": 8,
     "log": [],
 }
 
@@ -34,6 +36,6 @@ final = build().invoke(init)
 print("===== 提取过程 =====")
 for line in final["log"]:
     print(line)
-print(f"\n收敛 voff = {final['voff']:.4f} V（真值 -2.0）")
-print(f"最终 NRMSE = {final['rmse_hist'][-1]:.2%}")
-print(f"收敛误差 = {abs(final['voff'] + 2.0):.4f} V")
+print(f"\n最优 voff = {final['best_voff']:.4f} V（真值 -2.0）")
+print(f"最优 NRMSE = {final['best_rmse']:.2%}")
+print(f"收敛误差 = {abs(final['best_voff'] + 2.0):.4f} V")

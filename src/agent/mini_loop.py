@@ -52,6 +52,8 @@ class S(TypedDict):
     voff: float             # 当前 voff 猜测
     rmse_hist: list         # 每轮 NRMSE
     voff_hist: list         # 每轮尝试的 voff
+    best_voff: float        # 历史最优（交卷交这张，不是最后一次）
+    best_rmse: float
     iter: int
     max_iter: int
     log: list
@@ -69,10 +71,17 @@ def simulate(state: S) -> dict:
 
 def evaluate(state: S) -> dict:
     r = nrmse(state["trial_id"], state["target_id"])  # 同协议同网格，直接对位
+    # 交卷交历史最优，不是最后一次（2026-09-18 震荡教训）
+    best_v, best_r = state.get("best_voff"), state.get("best_rmse")
+    if best_r is None or r < best_r:
+        best_v, best_r = state["voff"], r
     return {
         "rmse_hist": state["rmse_hist"] + [r],
         "voff_hist": state["voff_hist"] + [state["voff"]],
-        "log": state["log"] + [f"iter{state['iter']}: voff={state['voff']:.4f} V, NRMSE={r:.2%}"],
+        "best_voff": best_v,
+        "best_rmse": best_r,
+        "log": state["log"] + [f"iter{state['iter']}: voff={state['voff']:.4f} V, NRMSE={r:.2%}"
+                               + ("  ← 新最优" if best_v == state["voff"] else "")],
     }
 
 
@@ -86,18 +95,27 @@ def route(state: S) -> str:
 
 
 def propose(state: S) -> dict:
+    # voff ↔ NRMSE 配对历史——LLM 必须看到"哪个值误差多小"才会逼近，
+    # 只给 voff 列表它会震荡（2026-09-18 实测教训）
+    hist = "\n".join(
+        f"  voff={v:.4f} → NRMSE={r:.2%}"
+        for v, r in zip(state["voff_hist"], state["rmse_hist"])
+    )
     prompt = f"""你是 GaN HEMT 建模工程师，正在提取阈值电压 voff。
 器件线性区转移特性（Vd=1V）的实测数据（Vg: Id/A）：
 {json.dumps(_sample(state["target_vg"], state["target_id"]))}
 你当前用 voff={state["voff"]:.4f} 仿真的结果：
 {json.dumps(_sample(state["trial_vg"], state["trial_id"]))}
-当前 NRMSE={state["rmse_hist"][-1]:.2%}；历史尝试 voff={state["voff_hist"]}。
+历史（voff → 拟合误差 NRMSE，越小越好）：
+{hist}
 物理知识：voff 是阈值电压，即 Id 开始明显起流的栅压；voff 越负，曲线整体右移（需要更高的 Vg 才导通）。
-请给出下一个 voff 尝试值。只输出 JSON：{{"voff": 数值, "reason": "一句话"}}"""
+策略要求：历史里 NRMSE 最小的方向就是对的方向；朝它继续、并步进减半逼近（二分法），
+不要重复试过的值。请给出下一个 voff 尝试值。只输出 JSON：{{"voff": 数值, "reason": "一句话"}}"""
     resp = client.chat.completions.create(
         model="deepseek-chat",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=200,
+        temperature=0,  # 工程 pipeline 锁可复现性
     )
     text = resp.choices[0].message.content
     m = re.search(r"\{[^{}]*\}", text, re.S)
