@@ -67,3 +67,29 @@ wrdata transfer_trial2_{tag}.csv i(vd)
         raise RuntimeError(f"ngspice 失败:\n{r.stdout}\n{r.stderr}")
     d = np.loadtxt(SIM_DIR / f"transfer_trial2_{tag}.csv")
     return d[:, 0], -d[:, 1]
+
+
+def run_transfer3(voff: float, u0: float, rontr1: float, tag: str) -> tuple[np.ndarray, np.ndarray]:
+    """三参数版：voff + u0 + rontr1（陷阱耦合进提取空间，trapmod=2 开）。
+    协议同 transfer_jia.sp（Vd=1V，Vg -4→2）。任务卡10-bis 任务2。"""
+    netlist = f"""* agent 试算 #{tag}: voff={voff} u0={u0} rontr1={rontr1}
+Vd d 0 1
+Vg g 0 0
+N1 d g 0 0 0 trialmod
+.model trialmod asmhemt (rdsmod=1 voff={voff} u0={u0} trapmod=2 rontr1={rontr1})
+
+.control
+pre_osdi {OSDI_REL}
+dc Vg -4 2 0.05
+wrdata transfer_trial3_{tag}.csv i(vd)
+.endc
+.end
+"""
+    sp = SIM_DIR / f"transfer_trial3_{tag}.sp"
+    sp.write_text(netlist, encoding="utf-8")
+    r = subprocess.run([NGSPICE, "-b", sp.name], cwd=SIM_DIR,
+                       capture_output=True, text=True, timeout=120)
+    if r.returncode != 0:
+        raise RuntimeError(f"ngspice 失败:\n{r.stdout}\n{r.stderr}")
+    d = np.loadtxt(SIM_DIR / f"transfer_trial3_{tag}.csv")
+    return d[:, 0], -d[:, 1]
