@@ -31,7 +31,7 @@ d = np.loadtxt(ROOT / "data" / "sim" / f"transfer_{dev}.csv")
 init: S = {
     "target_vg": d[:, 0],
     "target_id": -d[:, 1],
-    "sim_fn": lambda p, t: run_transfer_params(p, t)[1],
+    "sim_fn": lambda p, tag: run_transfer_params(p, tag)[1],
     "params_space": ["voff", "u0"],     # 只带两参数起步
     "values": {"voff": -2.0, "u0": 170e-3},
     "rmse": None,
