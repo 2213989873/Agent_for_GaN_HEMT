@@ -1,6 +1,7 @@
 # Agent 架构设计（评审稿，审过才准进 M1）
 
-> 版本 v1.0 · 2026-09-20 · 教练：Kimi ｜ 执行：zhengjp
+> 版本 v1.1 · 2026-09-20 · 教练：Kimi ｜ 执行：zhengjp
+> v1.1 修订记录（评审两条意见，均已源码核实成立）：① §4 对称性检查物理定义修正（镜像→相对一致性+默认不启用，证据 asmhemt.va 495/499/505/592 行源漏不对称+漏侧场板）；② §3 拟合执行接口签名修正（参数名出签名，统一 dict 通道）。
 > 依据：全部结论来自任务卡 01–15 实战存档与仓库源码（各条注明出处），不接受凭记忆发挥。
 > 目标：满足赛题硬要求——LangGraph 状态机、国产 LLM 在环、MCP 工具调用（≥10 次/器件）、多轮迭代、异常重试、状态持久化、日志可审计。
 
@@ -73,7 +74,7 @@ coarse(LLM粗调) → optimize(least_squares精修) → qa_check
 | 1 | 数据I/O | `load_measurement(device_id, form, bias_spec) -> {x, y, meta}` | 读 `data/devices/<dev>/*.csv` | 待真 server 文档（未验证） |
 | 2 | 模型选型 | `select_model(name="asmhemt", switches: dict) -> handle` | 渲染 .model 行开关（rdsmod/trapmod/shmod，sim_tools.py 模式） | 待真 server 文档（未验证） |
 | 3 | 参数操作 | `set_params(handle, params: dict)` / `get_defaults(name) -> dict` | 渲染 .inc/.model 参数；DEFAULTS 读 asmhemt.va 默认值 | 待真 server 文档（未验证） |
-| 4 | 拟合执行 | `run_simulation(handle, sim_spec: {form, sweep}) -> arrays` | ngspice 网表生成+批跑（sim_tools.py 六函数）；MCP 形态已验证：`run_iv_simulation(voff, u0, rontr1?, rth0?) -> JSON{id[], mcp_call}`（mcp_server_mock.py） | 组委会远程仿真 |
+| 4 | 拟合执行 | `run_simulation(handle, sim_spec: {form, sweep}) -> arrays`。**v1.1 修订（评审意见2）**：参数一律经第 3 行 `set_params(handle, dict)` 的 dict 通道进入，**参数名永不进工具签名**——卡14 的 `run_iv_simulation(voff, u0, rontr1?, rth0?)` 是 2 参数演示签名，扩到 120 参数就要重写一百次，违背本表"签名不变"约定，已废止；M4 时 mock server 工具相应重构为 `run_simulation(params: dict, sim_spec: dict)` | ngspice 网表生成+批跑（sim_tools.py 六函数） | 组委会远程仿真 |
 | 5 | QA检查 | `qa_check(values, curves, level: "param"\|"curve") -> {pass, violations[]}` | 参数级在客户端确定性计算（qa_loop.physics_qa，已验证）；曲线级客户端自算（§4） | 若真 server 提供 QA 服务则对拍，否则纯客户端 |
 | 6 | 会话管理 | `session_open(cfg)` / `session_close()` / `get_call_count() -> int` / `reset_count()` | 已实现：计数落盘 `data/sim/.mcp_call_count`（mcp_sim.py，卡14 验证 64 次） | 同签名接真 server |
 
@@ -86,7 +87,7 @@ coarse(LLM粗调) → optimize(least_squares精修) → qa_check
 | 参数物理范围 | 参数 | voff(D-mode)∈[-4,-0.5]V；u0∈[100e-3,250e-3]m²/V·s；rontr1∈[-3,1]；rth0∈[0.5,100]K/W | ✅ 已实战（卡11/12/13） |
 | 触优化边界告警 | 参数 | 解触 OPT_BOUNDS 边界=补偿解嫌疑（qa_loop.py BOUND_TOL=1e-3） | ✅ 已实战（卡10-bis 定稿） |
 | 单调性 | 曲线 | 转移特性 Id-Vg 要求单调不降（容差相对峰值 0.1%）；**输出特性饱和区除外——自热下垂是合法负微分**（卡07③ -2.8% 签名），故单调性按形态分区执行 | ⚠️ 阈值初定，未实战 |
-| 对称性 | 曲线 | 源漏互换（±Vd）曲线镜像差 <1% | ⚠️ 阈值初定，未实战 |
+| 对称性 | 曲线 | **v1.1 修订（评审意见1，源码铁证）**：物理镜像定义已废弃——GaN HEMT 源漏本就不对称（asmhemt.va:495/496 ns0accs/ns0accd、499/500 u0accs/u0accd、505/506 lsg/ldg 分开建模；592/593 fp1mod=漏侧场板），±Vd 镜像会把"物理正确的不对称"误杀。新定义：**相对一致性**——模型卡的±Vd 不对称度须与实测数据的不对称度一致（模型有不对称自由度，不对称本身可拟合）；阈值待标定，且**默认不启用**，等赛题 Q&A 明确"对称性"确切含义后再开 | ⚠️ 定义已修订，未实战 |
 | kink 检测 | 曲线 | 分段线性残差突变 >3σ 报警 | ⚠️ 阈值初定，未实战 |
 
 设计约束：曲线级检查输出 violations 进与参数级同一条路（驳回→coarse/expand），不新增路由分支。
