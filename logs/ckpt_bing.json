@@ -1,0 +1,128 @@
+{
+ "device_id": "bing",
+ "forms": [
+  "dc_transfer",
+  "cv_gg"
+ ],
+ "active_form": "cv_gg",
+ "data_forms": {
+  "dc_transfer": {
+   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/bing/transfer_bing.csv",
+   "n_points": 121
+  },
+  "cv_gg": {
+   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/bing/cv_gg_bing.csv",
+   "n_points": 1198
+  }
+ },
+ "params_space": [
+  "voff",
+  "u0",
+  "tbar"
+ ],
+ "values": {
+  "voff": -1.999990848838544,
+  "u0": 0.12993539206110347,
+  "tbar": 3.199403987436375e-08
+ },
+ "fit_hist": [
+  {
+   "space": [
+    "voff",
+    "u0",
+    "tbar"
+   ],
+   "values": {
+    "voff": -1.999990848838544,
+    "u0": 0.12993539206110347,
+    "tbar": 3.199403987436375e-08
+   },
+   "rmse": 0.00013191397776970168
+  }
+ ],
+ "best_values": {
+  "voff": -1.999990848838544,
+  "u0": 0.12993539206110347,
+  "tbar": 3.199403987436375e-08
+ },
+ "best_rmse": 0.00013191397776970168,
+ "rmse": 0.00013191397776970168,
+ "qa_pass": true,
+ "violations": [],
+ "n_retry": 0,
+ "budget": {
+  "sim_count": 61,
+  "llm_calls": 1,
+  "t0": 1789981695.410662,
+  "wall_s": 4.7
+ },
+ "final_card": {
+  "device": "bing",
+  "model": "asmhemt",
+  "params": {
+   "voff": -1.999990848838544,
+   "u0": 0.12993539206110347,
+   "tbar": 3.199403987436375e-08
+  },
+  "space": [
+   "voff",
+   "u0",
+   "tbar"
+  ],
+  "nrmse": 0.00013191397776970168,
+  "qa_pass": true
+ },
+ "completed": [
+  "session_open",
+  "load_data",
+  "analyze_data",
+  "init_params",
+  "switch_form",
+  "finalize_card",
+  "write_logs",
+  "session_close"
+ ],
+ "forms_done": [
+  "dc_transfer"
+ ],
+ "rmse_target": 0.005,
+ "warm_start": true,
+ "family_order": [
+  [
+   "voff",
+   "u0"
+  ],
+  [
+   "tbar"
+  ],
+  [
+   "rontr1"
+  ],
+  [
+   "rth0"
+  ]
+ ],
+ "freeze": [
+  "u0",
+  "rontr1",
+  "rth0"
+ ],
+ "log": [
+  "session_open: 选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点，cv_gg=1198点",
+  "analyze_data: 点数121，峰值0.3398A，首点1e-12，末点0.3398，单调点占比100% → 无明显自热/陷阱迹象。",
+  "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
+  "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
+  "optimize(10次仿真): voff=-1.993 u0=0.1299 → NRMSE=0.35%",
+  "physics_qa: ✅ 通过",
+  "switch_form: dc_transfer → cv_gg（1198点），热启动续跑 ['voff', 'u0']，达标线拧紧到 0.5%",
+  "optimize(7次仿真)（锁定 ['rontr1', 'rth0', 'u0']）: voff=-1.928 u0=0.1299 → NRMSE=19.21%",
+  "physics_qa: ✅ 通过",
+  "expand: NRMSE 未达标，扩空间追优 → 新参数族进场 ['tbar']",
+  "optimize(9次仿真)（锁定 ['rontr1', 'rth0', 'u0']）: voff=-2 u0=0.1299 tbar=3.199e-08 → NRMSE=0.01%",
+  "physics_qa: ✅ 通过",
+  "finalize_card: {'voff': np.float64(-1.999990848838544), 'u0': np.float64(0.12993539206110347), 'tbar': np.float64(3.199403987436375e-08)} NRMSE=0.0132%",
+  "write_logs: run_bing_20260921_170820.json",
+  "session_close: 调用计数 61 次（红线≥10：✅），耗时 4.7s"
+ ]
+}

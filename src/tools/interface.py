@@ -24,6 +24,7 @@ DEVICE_DIR = ROOT / "data" / "devices"
 FORM_FILES = {
     "dc_transfer": "{dev}/transfer_{dev}.csv",   # 2 列：Vg, i(vd)（取正）
     "dc_output": "{dev}/dc_output_{dev}.csv",    # 847 点嵌套扫描：Vd, i(vd)（取正拍平）
+    "cv_gg": "{dev}/cv_gg_{dev}.csv",            # 4 列：t, v(g), t, i(vg)（C=-i/1e6）
 }
 
 # 卡07 铁律：rdsmod=1 是接入电阻/陷阱挂载总开关，所有试算卡必须带
@@ -75,6 +76,11 @@ class LocalSession:
         rel = FORM_FILES[form]
         p = DEVICE_DIR / rel.format(dev=device_id)
         d = np.atleast_2d(np.loadtxt(p))
+        if form == "cv_gg":
+            # 准静态 C-V：4 列 t, v(g), t, i(vg)；C=-i/slope；丢首尾各5点（卡08）
+            d = d[5:-5]
+            return {"path": str(p), "n_points": int(len(d)),
+                    "x": d[:, 1], "y": -d[:, 3] / 1e6}
         return {"path": str(p), "n_points": int(len(d)),
                 "x": d[:, 0], "y": -d[:, 1]}   # SPICE 电流符号约定取正
 
@@ -89,7 +95,11 @@ class LocalSession:
         if form == "dc_output":
             fn = st.run_output_selfheat_params if "rth0" in p else st.run_output_params
             return fn(p, tag)
-        raise ValueError(f"未支持的形态 {form}（cv/pulse 为 M3 内容）")
+        if form == "cv_gg":
+            # 自适应步长 → interp 到目标网格（sim_spec["grid"] 由调用方给）
+            vg, c = st.run_cv_params(p, tag)
+            return np.interp(sim_spec["grid"], vg, c)
+        raise ValueError(f"未支持的形态 {form}（pulse 为后续里程碑）")
 
     # ---- 5 QA检查 ----
     def qa_check(self, values: dict, curves: dict | None = None,

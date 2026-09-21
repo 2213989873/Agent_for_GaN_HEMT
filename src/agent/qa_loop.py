@@ -41,15 +41,18 @@ QA_RULES = {                      # 物理合理区间（含触发值，超出=�
     "u0": (100e-3, 250e-3),       # GaN 低场迁移率 (m²/V·s)
     "rontr1": (-3.0, 1.0),        # 陷阱耦合强度
     "rth0": (0.5, 100.0),         # 热阻 (K/W)，GaN HEMT 典型 1~50
+    "tbar": (5e-9, 50e-9),        # 势垒层厚度 (m)，AlGaN 典型 5~30nm——M3
 }
 OPT_BOUNDS = {                    # 优化器边界（比 QA 宽，给探索留余地）
     "voff": (-3.0, -1.0),
     "u0": (0.05, 0.30),
     "rontr1": (-3.0, 1.0),
     "rth0": (0.1, 100.0),
+    "tbar": (1e-8, 40e-9),
 }
-DEFAULTS = {"voff": -2.0, "u0": 170e-3, "rontr1": 0.0, "rth0": 5.0}
-PARAM_ENTRY_ORDER = [["voff", "u0"], ["rontr1"], ["rth0"]]  # 参数族进场顺序（知识表1）
+DEFAULTS = {"voff": -2.0, "u0": 170e-3, "rontr1": 0.0, "rth0": 5.0, "tbar": 2.5e-8}
+X_SCALE = {"voff": 1.0, "u0": 0.1, "rontr1": 1.0, "rth0": 10.0, "tbar": 2.5e-8}  # M3 修复
+PARAM_ENTRY_ORDER = [["voff", "u0"], ["rontr1"], ["rth0"], ["tbar"]]  # 参数族进场顺序（知识表1）
 RMSE_TARGET = 0.01                # 任务卡13：expand 第二触发器的 NRMSE 阈值
 BOUND_TOL = 1e-3                  # 触优化边界判定容差（相对）
 
@@ -66,6 +69,8 @@ class S(TypedDict):
     n_retry: int            # 本参数空间内的重调次数
     rmse_target: float      # NRMSE 达标线（卡13 旋钮；缺省用模块 RMSE_TARGET）——M2
     warm_start: bool        # True=跳过 coarse 直达 optimize（M2 形态轮转续跑）
+    family_order: list      # 参数族进场顺序（缺省用模块 PARAM_ENTRY_ORDER）——M3 分形态优先级
+    freeze: list            # 锁定参数名单（optimize 不动它们）——M3 分形态锁定
     log: list
 
 
@@ -97,24 +102,33 @@ def coarse(state: S) -> dict:
 
 
 def optimize(state: S) -> dict:
-    """least_squares 精修当前参数空间。"""
+    """least_squares 精修当前参数空间（freeze 名单内的参数锁定不动——M3 分形态锁定）。"""
+    freeze = set(state.get("freeze") or [])
     space = state["params_space"]
+    free = [p for p in space if p not in freeze]
     tgt = state["target_id"]
     scale = np.abs(tgt).max()
+    base = dict(state["values"])
 
     def resid(x):
-        idv = state["sim_fn"](dict(zip(space, x)), tag=f"qa{state['n_retry']}")
+        p = {**base, **dict(zip(free, x))}
+        idv = state["sim_fn"](p, tag=f"qa{state['n_retry']}")
         return (idv - tgt) / scale
 
-    x0 = np.array([state["values"][p] for p in space])
-    lb = np.array([OPT_BOUNDS[p][0] for p in space])
-    ub = np.array([OPT_BOUNDS[p][1] for p in space])
-    x0 = np.clip(x0, lb + 1e-6, ub - 1e-6)
-    r = least_squares(resid, x0, bounds=(lb, ub), xtol=1e-5)
-    values = dict(zip(space, r.x))
+    x0 = np.array([state["values"][p] for p in free])
+    lb = np.array([OPT_BOUNDS[p][0] for p in free])
+    ub = np.array([OPT_BOUNDS[p][1] for p in free])
+    span = ub - lb
+    # M3 修复：clip 余量改相对值——绝对 1e-6 对小量纲参数（tbar~1e-8）会把
+    # 上下界夹反（ub-1e-6<lb），least_squares 报 initial guess outside bounds
+    x0 = np.clip(x0, lb + 1e-6 * span, ub - 1e-6 * span)
+    r = least_squares(resid, x0, bounds=(lb, ub), xtol=1e-5,
+                      x_scale=[X_SCALE[p] for p in free])  # M3：量纲均衡
+    values = {**base, **dict(zip(free, r.x))}
     rmse_now = float(np.sqrt(np.mean(r.fun ** 2)))
+    frozen = f"（锁定 {sorted(freeze)}）" if freeze else ""
     return {"values": values, "rmse": rmse_now,
-            "log": state["log"] + [f"optimize({r.nfev}次仿真): "
+            "log": state["log"] + [f"optimize({r.nfev}次仿真){frozen}: "
                                    + " ".join(f"{p}={v:.4g}" for p, v in values.items())
                                    + f" → NRMSE={rmse_now:.2%}"]}
 
@@ -136,9 +150,10 @@ def physics_qa(state: S) -> dict:
 
 
 def _has_remaining(state: S) -> bool:
-    """是否还有未进场的参数族。"""
+    """是否还有未进场的参数族（M3：可被 state 注入分形态优先级）。"""
+    order = state.get("family_order") or PARAM_ENTRY_ORDER
     return any(p not in state["params_space"]
-               for fam in PARAM_ENTRY_ORDER for p in fam)
+               for fam in order for p in fam)
 
 
 def route_after_qa(state: S) -> str:
@@ -157,12 +172,13 @@ def route_after_qa(state: S) -> str:
 
 
 def expand(state: S) -> dict:
-    """扩提取空间：按知识表1的进场顺序补下一族参数。
+    """扩提取空间：按知识表1的进场顺序补下一族参数（M3：可分形态注入优先级）。
     log 区分触发器（任务卡13）：QA 驳回撞墙 vs NRMSE 未达标追优。"""
     reason = ("NRMSE 未达标，扩空间追优"
               if state["qa_pass"] else "QA 反复驳回=撞天花板")
+    order = state.get("family_order") or PARAM_ENTRY_ORDER
     space = list(state["params_space"])
-    for fam in PARAM_ENTRY_ORDER:
+    for fam in order:
         new = [p for p in fam if p not in space]
         if new:
             space += new

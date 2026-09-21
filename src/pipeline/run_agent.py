@@ -28,12 +28,13 @@ def fresh_state(device: str, forms: list, via_mcp: bool) -> S_agent:
             "qa_pass": False, "violations": [], "n_retry": 0,
             "budget": {}, "final_card": None, "completed": [],
             "forms_done": [], "rmse_target": None, "warm_start": False,
+            "family_order": None, "freeze": None,
             "via_mcp": via_mcp, "log": []}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--device", required=True, choices=["jia", "yi"])
+    ap.add_argument("--device", required=True, choices=["jia", "yi", "bing"])
     ap.add_argument("--forms", default="dc_transfer")
     ap.add_argument("--via-mcp", action="store_true")
     ap.add_argument("--resume", action="store_true")

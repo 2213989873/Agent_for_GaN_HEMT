@@ -183,3 +183,34 @@ wrdata output_sh_trialP_{tag}.csv i(vd)
         raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
     d = np.loadtxt(SIM_DIR / f"output_sh_trialP_{tag}.csv")
     return -d[:, 1]
+
+
+def run_cv_params(params: dict, tag: str) -> tuple[np.ndarray, np.ndarray]:
+    """准静态 C-V 版（任务卡08 协议）：PWL 斜坡 -6→6V @1e6 V/s，C=-i(vg)/slope。
+    返回 (Vg 数组, C 数组[F])，丢首尾各 5 点（斜坡起止斜率突变不可信）。
+    自适应步长下每次仿真的时间网格不同——调用方负责 interp 到目标网格。
+    M3：电容族参数=tbar（标定：±20%→12~17% NRMSE）；cgso/cgdo 不可辨识（F/m×w）。
+    """
+    card = " ".join(f"{k}={v}" for k, v in params.items())
+    netlist = f"""* agent 试算(CV) #{tag}: {card}
+Vd d 0 0
+Vg g 0 PWL(0 -6  12u 6)
+N1 d g 0 0 0 trialmod
+.model trialmod asmhemt (rdsmod=1 {card})
+
+.control
+pre_osdi {OSDI_REL}
+tran 0.01u 12u
+wrdata cv_trialP_{tag}.csv v(g) i(vg)
+.endc
+.end
+"""
+    sp = SIM_DIR / f"cv_trialP_{tag}.sp"
+    sp.write_text(netlist, encoding="utf-8")
+    r = subprocess.run([NGSPICE, "-b", sp.name], cwd=SIM_DIR,
+                       capture_output=True, text=True, timeout=120)
+    if r.returncode != 0:
+        raise RuntimeError("ngspice 失败: " + r.stdout + r.stderr)
+    d = np.loadtxt(SIM_DIR / f"cv_trialP_{tag}.csv")
+    vg, c = d[5:-5, 1], -d[5:-5, 3] / 1e6
+    return vg, c

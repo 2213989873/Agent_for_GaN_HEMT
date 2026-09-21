@@ -31,7 +31,21 @@ REDLINE_MIN_CALLS = 10      # 赛题红线：每器件工具调用 ≥10（卡14
 # M2 形态轮转：分形态达标线（卡13 旋钮的代码化）
 # 输出形态拧紧到 0.3%——让触发器2 点火、热参数族进场追真（四参数 0.0003% 基准），
 # 避免三参数 0.6002% 贴着 M2 判据（≤0.6%）翻车。
-FORM_TARGET = {"dc_transfer": 0.01, "dc_output": 0.003}
+# cv_gg 定 0.5%：M3 标定噪声底 0.0035%，tbar/voff 敏感度都在百分之几到十几量级。
+FORM_TARGET = {"dc_transfer": 0.01, "dc_output": 0.003, "cv_gg": 0.005}
+
+# M3 分形态参数族优先级：cv_gg 形态电容族（tbar）优先——rontr1/rth0 在准静态
+# 栅流里不可见，按默认顺序会白扩两轮（标定实测）。
+FORM_FAMILY = {
+    "cv_gg": [["voff", "u0"], ["tbar"], ["rontr1"], ["rth0"]],
+}
+
+# M3 分形态锁定（知识表1"锁定参数"列的代码化）：当前形态不可见的已提参数冻结，
+# 防数值噪声拖走（bing 实测：u0 在 CV 形态被拖 0.17→0.13，CV 看不见它）。
+# 注意：voff 在 CV 里强可见（±0.2V→6.5%），不锁。
+FORM_FREEZE = {
+    "cv_gg": ["u0", "rontr1", "rth0"],
+}
 
 
 class S_agent(TypedDict):
@@ -58,6 +72,8 @@ class S_agent(TypedDict):
     forms_done: list        # M2：已完成提取的形态
     rmse_target: object     # M2：当前形态达标线（注入 extract 子图）
     warm_start: bool        # M2：第二形态起跳过 coarse
+    family_order: object    # M3：分形态参数族优先级（注入 extract 子图）
+    freeze: object          # M3：分形态锁定名单（注入 extract 子图）
     log: list
 
 
@@ -73,7 +89,7 @@ def _save_ckpt(state: S_agent) -> None:
             ("device_id", "forms", "active_form", "data_forms", "params_space",
              "values", "fit_hist", "best_values", "best_rmse", "rmse", "qa_pass",
              "violations", "n_retry", "budget", "final_card", "completed",
-             "forms_done", "rmse_target", "warm_start", "log")}
+             "forms_done", "rmse_target", "warm_start", "family_order", "freeze", "log")}
     _ckpt_path(state["device_id"]).write_text(
         json.dumps(snap, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
 
@@ -95,12 +111,14 @@ def rehydrate(state: S_agent) -> S_agent:
 
     def sim_fn(params: dict, tag: str):
         sess.set_params(handle, params)
-        return sess.run_simulation(handle, {"form": form0, "tag": tag})
+        spec = {"form": form0, "tag": tag}
+        if form0 == "cv_gg":
+            spec["grid"] = m["x"]              # CV 自适应步长 → interp 目标网格
+        return sess.run_simulation(handle, spec)
 
     state["active_form"] = form0
     state["target_vg"], state["target_id"], state["sim_fn"] = m["x"], m["y"], sim_fn
     return state
-
 
 def node(name):
     """节点包装：resume 跳过已完成节点；正常执行后落 ckpt。"""
@@ -144,7 +162,10 @@ def load_data(state: S_agent) -> dict:
 
     def sim_fn(params: dict, tag: str):
         sess.set_params(handle, params)
-        return sess.run_simulation(handle, {"form": form0, "tag": tag})
+        spec = {"form": form0, "tag": tag}
+        if form0 == "cv_gg":
+            spec["grid"] = first["x"]
+        return sess.run_simulation(handle, spec)
 
     return {"data_forms": data_forms, "active_form": form0,
             "target_vg": first["x"], "target_id": first["y"], "sim_fn": sim_fn,
@@ -184,6 +205,8 @@ def init_params(state: S_agent) -> dict:
     return {"params_space": space, "values": values, "n_retry": 0,
             "qa_pass": False, "violations": [], "rmse": None,
             "rmse_target": target, "warm_start": False,
+            "family_order": FORM_FAMILY.get(state["active_form"]),
+            "freeze": FORM_FREEZE.get(state["active_form"]),
             "log": state["log"] + [f"init_params: 起步空间 {space}，初值 {values}，达标线 {target:.1%}"]}
 
 
@@ -202,12 +225,17 @@ def switch_form(state: S_agent) -> dict:
 
     def sim_fn(params: dict, tag: str):
         sess.set_params(handle, params)
-        return sess.run_simulation(handle, {"form": form, "tag": tag})
+        spec = {"form": form, "tag": tag}
+        if form == "cv_gg":
+            spec["grid"] = m["x"]
+        return sess.run_simulation(handle, spec)
 
     target = FORM_TARGET.get(form, 0.01)
+    family = FORM_FAMILY.get(form)               # M3：分形态参数族优先级
     return {"active_form": form, "forms_done": done,
             "target_vg": m["x"], "target_id": m["y"], "sim_fn": sim_fn,
             "rmse_target": target, "warm_start": True, "n_retry": 0,
+            "family_order": family, "freeze": FORM_FREEZE.get(form),
             "log": state["log"] + [f"switch_form: {state['active_form']} → {form}（{m['n_points']}点），"
                                    f"热启动续跑 {state['params_space']}，达标线拧紧到 {target:.1%}"]}
 
