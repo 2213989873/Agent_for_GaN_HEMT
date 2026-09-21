@@ -1,0 +1,121 @@
+{
+ "device_id": "yi",
+ "forms": [
+  "dc_transfer",
+  "dc_output"
+ ],
+ "active_form": "dc_output",
+ "data_forms": {
+  "dc_transfer": {
+   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/yi/transfer_yi.csv",
+   "n_points": 121
+  },
+  "dc_output": {
+   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/yi/dc_output_yi.csv",
+   "n_points": 847
+  }
+ },
+ "params_space": [
+  "voff",
+  "u0",
+  "rontr1",
+  "rth0"
+ ],
+ "values": {
+  "voff": -2.2000258962046617,
+  "u0": 0.14998936289572665,
+  "rontr1": -0.999872284135715,
+  "rth0": 19.98545690830923
+ },
+ "fit_hist": [
+  {
+   "space": [
+    "voff",
+    "u0",
+    "rontr1",
+    "rth0"
+   ],
+   "values": {
+    "voff": -2.2000258962046617,
+    "u0": 0.14998936289572665,
+    "rontr1": -0.999872284135715,
+    "rth0": 19.98545690830923
+   },
+   "rmse": 3.541433812255352e-06
+  }
+ ],
+ "best_values": {
+  "voff": -2.2000258962046617,
+  "u0": 0.14998936289572665,
+  "rontr1": -0.999872284135715,
+  "rth0": 19.98545690830923
+ },
+ "best_rmse": 3.541433812255352e-06,
+ "rmse": 3.541433812255352e-06,
+ "qa_pass": true,
+ "violations": [],
+ "n_retry": 0,
+ "budget": {
+  "sim_count": 2001,
+  "llm_calls": 1,
+  "t0": 1789979463.192633,
+  "wall_s": 44.5
+ },
+ "final_card": {
+  "device": "yi",
+  "model": "asmhemt",
+  "params": {
+   "voff": -2.2000258962046617,
+   "u0": 0.14998936289572665,
+   "rontr1": -0.999872284135715,
+   "rth0": 19.98545690830923
+  },
+  "space": [
+   "voff",
+   "u0",
+   "rontr1",
+   "rth0"
+  ],
+  "nrmse": 3.541433812255352e-06,
+  "qa_pass": true
+ },
+ "completed": [
+  "session_open",
+  "load_data",
+  "analyze_data",
+  "init_params",
+  "switch_form",
+  "finalize_card",
+  "write_logs",
+  "session_close"
+ ],
+ "forms_done": [
+  "dc_transfer"
+ ],
+ "rmse_target": 0.003,
+ "warm_start": true,
+ "log": [
+  "session_open: 选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点，dc_output=847点",
+  "analyze_data: 点数121，峰值0.2888A，首点1e-12，末点0.2888，单调点占比98% → 无明显自热/陷阱迹象。",
+  "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
+  "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
+  "optimize(11次仿真): voff=-2.517 u0=0.08402 → NRMSE=2.70%",
+  "physics_qa: ❌ 驳回——u0=0.08402 超出物理范围 [0.1, 0.25]",
+  "coarse: 初值 {'voff': -2.1, 'u0': 0.15}（驳回史: u0=0.08402 超出物理范围 [0.1, 0.25]）",
+  "optimize(11次仿真): voff=-2.518 u0=0.08397 → NRMSE=2.70%",
+  "physics_qa: ❌ 驳回——u0=0.08397 超出物理范围 [0.1, 0.25]",
+  "expand: QA 反复驳回=撞天花板 → 新参数族进场 ['rontr1']",
+  "optimize(45次仿真): voff=-2.2 u0=0.15 rontr1=-0.9999 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "switch_form: dc_transfer → dc_output（847点），热启动续跑 ['voff', 'u0', 'rontr1']，达标线拧紧到 0.3%",
+  "optimize(13次仿真): voff=-2.237 u0=0.1352 rontr1=-0.8046 → NRMSE=0.60%",
+  "physics_qa: ✅ 通过",
+  "expand: NRMSE 未达标，扩空间追优 → 新参数族进场 ['rth0']",
+  "optimize(346次仿真): voff=-2.2 u0=0.15 rontr1=-0.9999 rth0=19.99 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "finalize_card: {'voff': np.float64(-2.2000258962046617), 'u0': np.float64(0.14998936289572665), 'rontr1': np.float64(-0.999872284135715), 'rth0': np.float64(19.98545690830923)} NRMSE=0.0004%",
+  "write_logs: run_yi_20260921_163147.json",
+  "session_close: 调用计数 2001 次（红线≥10：✅），耗时 44.5s"
+ ]
+}

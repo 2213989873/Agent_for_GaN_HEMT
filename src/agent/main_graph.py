@@ -28,6 +28,11 @@ from src.tools.interface import get_session  # noqa: E402
 LOG_DIR = ROOT / "logs"
 REDLINE_MIN_CALLS = 10      # 赛题红线：每器件工具调用 ≥10（卡14 §4 保底条款）
 
+# M2 形态轮转：分形态达标线（卡13 旋钮的代码化）
+# 输出形态拧紧到 0.3%——让触发器2 点火、热参数族进场追真（四参数 0.0003% 基准），
+# 避免三参数 0.6002% 贴着 M2 判据（≤0.6%）翻车。
+FORM_TARGET = {"dc_transfer": 0.01, "dc_output": 0.003}
+
 
 class S_agent(TypedDict):
     device_id: str
@@ -50,6 +55,9 @@ class S_agent(TypedDict):
     final_card: object
     completed: list
     via_mcp: bool
+    forms_done: list        # M2：已完成提取的形态
+    rmse_target: object     # M2：当前形态达标线（注入 extract 子图）
+    warm_start: bool        # M2：第二形态起跳过 coarse
     log: list
 
 
@@ -64,7 +72,8 @@ def _save_ckpt(state: S_agent) -> None:
     snap = {k: state[k] for k in
             ("device_id", "forms", "active_form", "data_forms", "params_space",
              "values", "fit_hist", "best_values", "best_rmse", "rmse", "qa_pass",
-             "violations", "n_retry", "budget", "final_card", "completed", "log")}
+             "violations", "n_retry", "budget", "final_card", "completed",
+             "forms_done", "rmse_target", "warm_start", "log")}
     _ckpt_path(state["device_id"]).write_text(
         json.dumps(snap, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
 
@@ -139,6 +148,7 @@ def load_data(state: S_agent) -> dict:
 
     return {"data_forms": data_forms, "active_form": form0,
             "target_vg": first["x"], "target_id": first["y"], "sim_fn": sim_fn,
+            "forms_done": [],
             "log": state["log"] + [f"load_data: " + "，".join(
                 f"{f}={d['n_points']}点" for f, d in data_forms.items())]}
 
@@ -170,9 +180,42 @@ def analyze_data(state: S_agent) -> dict:
 def init_params(state: S_agent) -> dict:
     space = ["voff", "u0"]                     # 知识表1 步骤1：两参数族起步
     values = {p: DEFAULTS[p] for p in space}
+    target = FORM_TARGET.get(state["active_form"], 0.01)
     return {"params_space": space, "values": values, "n_retry": 0,
             "qa_pass": False, "violations": [], "rmse": None,
-            "log": state["log"] + [f"init_params: 起步空间 {space}，初值 {values}"]}
+            "rmse_target": target, "warm_start": False,
+            "log": state["log"] + [f"init_params: 起步空间 {space}，初值 {values}，达标线 {target:.1%}"]}
+
+
+@node("switch_form")
+def switch_form(state: S_agent) -> dict:
+    """M2 形态轮转：切到下一形态，热启动续跑（保留参数空间与当前值）。
+
+    不重跑 coarse——第一形态提出的参数是后续形态的起点（知识表1 提参顺序），
+    重跑 coarse 会把真值初值冲掉（卡11 教训：LLM 初值也会被吸引盆拉走，
+    但没理由主动放弃已到手的解）。"""
+    sess = get_session()
+    handle = sess.handle
+    done = state["forms_done"] + [state["active_form"]]
+    form = state["forms"][len(done)]
+    m = sess.load_measurement(state["device_id"], form)
+
+    def sim_fn(params: dict, tag: str):
+        sess.set_params(handle, params)
+        return sess.run_simulation(handle, {"form": form, "tag": tag})
+
+    target = FORM_TARGET.get(form, 0.01)
+    return {"active_form": form, "forms_done": done,
+            "target_vg": m["x"], "target_id": m["y"], "sim_fn": sim_fn,
+            "rmse_target": target, "warm_start": True, "n_retry": 0,
+            "log": state["log"] + [f"switch_form: {state['active_form']} → {form}（{m['n_points']}点），"
+                                   f"热启动续跑 {state['params_space']}，达标线拧紧到 {target:.1%}"]}
+
+
+def route_after_extract(state: S_agent) -> str:
+    """extract 子图跑完一个形态后：还有形态→switch_form 轮转；否则→finalize。"""
+    return "switch_form" if len(state["forms_done"]) + 1 < len(state["forms"]) \
+        else "finalize_card"
 
 
 @node("finalize_card")
@@ -234,6 +277,7 @@ def build_main():
     g.add_node("analyze_data", analyze_data)
     g.add_node("init_params", init_params)
     g.add_node("extract", build_extract())       # qa_loop 编译子图（卡11/12/13 验证）
+    g.add_node("switch_form", switch_form)       # M2 形态轮转
     g.add_node("finalize_card", finalize_card)
     g.add_node("write_logs", write_logs)
     g.add_node("session_close", session_close)
@@ -242,7 +286,10 @@ def build_main():
     g.add_edge("load_data", "analyze_data")
     g.add_edge("analyze_data", "init_params")
     g.add_edge("init_params", "extract")
-    g.add_edge("extract", "finalize_card")
+    g.add_conditional_edges("extract", route_after_extract,
+                            {"switch_form": "switch_form",
+                             "finalize_card": "finalize_card"})
+    g.add_edge("switch_form", "extract")
     g.add_edge("finalize_card", "write_logs")
     g.add_edge("write_logs", "session_close")
     g.add_edge("session_close", END)

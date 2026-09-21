@@ -27,6 +27,7 @@ def fresh_state(device: str, forms: list, via_mcp: bool) -> S_agent:
             "best_values": None, "best_rmse": None, "rmse": None,
             "qa_pass": False, "violations": [], "n_retry": 0,
             "budget": {}, "final_card": None, "completed": [],
+            "forms_done": [], "rmse_target": None, "warm_start": False,
             "via_mcp": via_mcp, "log": []}
 
 

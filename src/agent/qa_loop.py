@@ -64,6 +64,8 @@ class S(TypedDict):
     qa_pass: bool
     violations: list        # QA 驳回原因
     n_retry: int            # 本参数空间内的重调次数
+    rmse_target: float      # NRMSE 达标线（卡13 旋钮；缺省用模块 RMSE_TARGET）——M2
+    warm_start: bool        # True=跳过 coarse 直达 optimize（M2 形态轮转续跑）
     log: list
 
 
@@ -142,9 +144,11 @@ def _has_remaining(state: S) -> bool:
 def route_after_qa(state: S) -> str:
     """双触发器（任务卡13）：
     触发器1 QA 驳回——先换初值重调（<2次），再撞天花板扩空间；
-    触发器2 QA 通过但 NRMSE 未达标——直接扩空间（还有族可扩的话）。"""
+    触发器2 QA 通过但 NRMSE 未达标——直接扩空间（还有族可扩的话）。
+    M2：达标线可从 state 注入（形态轮转时分形态拧紧）。"""
+    target = state.get("rmse_target") or RMSE_TARGET
     if state["qa_pass"]:
-        if state["rmse"] is not None and state["rmse"] < RMSE_TARGET:
+        if state["rmse"] is not None and state["rmse"] < target:
             return END
         return "expand" if _has_remaining(state) else END  # 触发器2
     if state["n_retry"] < 2:
@@ -172,11 +176,15 @@ def expand(state: S) -> dict:
 
 def build():
     g = StateGraph(S)
+    g.add_node("entry", lambda s: {})   # M2 入口路由：warm_start 跳过 coarse
     g.add_node("coarse", coarse)
     g.add_node("optimize", optimize)
     g.add_node("physics_qa", physics_qa)
     g.add_node("expand", expand)
-    g.add_edge(START, "coarse")
+    g.add_edge(START, "entry")
+    g.add_conditional_edges("entry",
+                            lambda s: "optimize" if s.get("warm_start") else "coarse",
+                            {"coarse": "coarse", "optimize": "optimize"})
     g.add_edge("coarse", "optimize")
     g.add_edge("optimize", "physics_qa")
     g.add_conditional_edges("physics_qa", route_after_qa,
