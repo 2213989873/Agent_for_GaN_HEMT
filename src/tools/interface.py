@@ -206,3 +206,11 @@ def get_session(via_mcp: bool = False) -> BaseSession:
     if _SESSION is None:
         _SESSION = McpSession() if via_mcp else LocalSession()
     return _SESSION
+
+
+def close_session() -> None:
+    """显式关闭并注销单例（M5 多器件连跑：器件间必须断开，防复用已 close 的连接）。"""
+    global _SESSION
+    if _SESSION is not None:
+        _SESSION.close()
+        _SESSION = None

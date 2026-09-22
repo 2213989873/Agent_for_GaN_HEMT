@@ -1,0 +1,25 @@
+{
+ "device": "jia",
+ "model": "asmhemt",
+ "params": {
+  "voff": -2.0000000201020227,
+  "u0": 0.16662356986260926
+ },
+ "space": [
+  "voff",
+  "u0"
+ ],
+ "nrmse": 0.003857218343070125,
+ "rmse_per_form": {
+  "dc_transfer": 0.003857218343070125,
+  "dc_output": 0.0021666474656508007,
+  "cv_gg": 7.05342191138026e-09
+ },
+ "qa_pass": true,
+ "git_head": "f0c48ed",
+ "budget": {
+  "sim_count": 81,
+  "llm_calls": 1,
+  "wall_s": 4.4
+ }
+}

@@ -3,6 +3,7 @@
 节点链：
   START → session_open → load_data → analyze_data → init_params
         → extract（qa_loop 编译子图，四节点+双触发器，卡11/12/13 验证）
+        → [switch_form ↺ 形态轮转] → joint_refine（M5 跨形态联合精修）
         → finalize_card → write_logs → session_close → END
 
 checkpoint 偏差说明（相对设计文档 §1，2026-09-20 工程判决）：
@@ -22,8 +23,9 @@ from langgraph.graph import END, START, StateGraph
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
-from src.agent.qa_loop import DEFAULTS, build as build_extract, client  # noqa: E402
-from src.tools.interface import get_session  # noqa: E402
+from src.agent.qa_loop import (DEFAULTS, OPT_BOUNDS, QA_RULES, X_SCALE,  # noqa: E402
+                               build as build_extract, client)
+from src.tools.interface import close_session, get_session  # noqa: E402
 
 LOG_DIR = ROOT / "logs"
 REDLINE_MIN_CALLS = 10      # 赛题红线：每器件工具调用 ≥10（卡14 §4 保底条款）
@@ -74,6 +76,7 @@ class S_agent(TypedDict):
     warm_start: bool        # M2：第二形态起跳过 coarse
     family_order: object    # M3：分形态参数族优先级（注入 extract 子图）
     freeze: object          # M3：分形态锁定名单（注入 extract 子图）
+    rmse_per_form: object   # M5：逐形态 NRMSE 明细（joint_refine 写，提交物用）
     log: list
 
 
@@ -90,7 +93,7 @@ def _save_ckpt(state: S_agent) -> None:
              "values", "fit_hist", "best_values", "best_rmse", "rmse", "qa_pass",
              "violations", "n_retry", "budget", "final_card", "completed",
              "forms_done", "rmse_target", "warm_start", "family_order", "freeze",
-             "via_mcp", "log")}
+             "rmse_per_form", "via_mcp", "log")}
     _ckpt_path(state["device_id"]).write_text(
         json.dumps(snap, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
 
@@ -121,11 +124,18 @@ def rehydrate(state: S_agent) -> S_agent:
     state["target_vg"], state["target_id"], state["sim_fn"] = m["x"], m["y"], sim_fn
     return state
 
+# 多形态流程中合法多次执行的节点：不按 completed 跳过。
+# （bug 实录 2026-09-22：switch_form 被 resume 跳过机制误伤——三形态首跑时
+# 第二次进入被判"已完成"，forms_done 不再增长，extract↔switch_form 死循环
+# 触递归上限。线性链节点仍按名跳过；可重复节点靠 forms_done 保证幂等。）
+REPEATABLE_NODES = {"switch_form"}
+
+
 def node(name):
-    """节点包装：resume 跳过已完成节点；正常执行后落 ckpt。"""
+    """节点包装：resume 跳过已完成的线性节点（可重复节点除外）；执行后落 ckpt。"""
     def deco(fn):
         def wrapped(state: S_agent):
-            if name in state["completed"]:
+            if name in state["completed"] and name not in REPEATABLE_NODES:
                 return {"log": state["log"] + [f"{name}: 已完成，跳过（resume）"]}
             out = fn(state)
             completed = state["completed"] + [name]
@@ -243,9 +253,89 @@ def switch_form(state: S_agent) -> dict:
 
 
 def route_after_extract(state: S_agent) -> str:
-    """extract 子图跑完一个形态后：还有形态→switch_form 轮转；否则→finalize。"""
+    """extract 子图跑完一个形态后：还有形态→switch_form 轮转；否则→joint_refine。"""
     return "switch_form" if len(state["forms_done"]) + 1 < len(state["forms"]) \
-        else "finalize_card"
+        else "joint_refine"
+
+
+@node("joint_refine")
+def joint_refine(state: S_agent) -> dict:
+    """M5 跨形态联合精修（M3 遗留"后修形态挤占先修形态"的处置）：
+    全部形态各自达标后，全参数在全部形态上联合最小二乘。各形态等权：
+    残差块按 1/√n_i 归一，联合目标 = ΣNRMSE_i²（点数多的形态不主导）。
+
+    验收门（保守策略，任一不过则整体回退到分形态解，日志明记）：
+      ① 每形态 NRMSE 回潮 ≤5%（相对）——只允许噪声级让步；
+      ② 最差形态 NRMSE 不劣化——模型卡质量由最差形态定义；
+      ③ 参数过 QA 物理范围复核。
+    """
+    from scipy.optimize import least_squares
+
+    forms = state["forms_done"] + [state["active_form"]]
+    if len(forms) < 2:
+        return {"rmse_per_form": {state["active_form"]: state["rmse"]},
+                "log": state["log"] + ["joint_refine: 单形态，跳过联合精修"]}
+    sess = get_session(state["via_mcp"])
+    handle = sess.handle
+    meas = {fm: sess.load_measurement(state["device_id"], fm) for fm in forms}
+
+    def sim_form(params: dict, form: str, tag: str):
+        sess.set_params(handle, params)
+        spec = {"form": form, "tag": tag}
+        if form == "cv_gg":
+            spec["grid"] = meas[form]["x"]
+        return sess.run_simulation(handle, spec)
+
+    def per_form(params: dict, tag: str) -> dict:
+        out = {}
+        for fm in forms:
+            y = meas[fm]["y"]
+            out[fm] = float(np.sqrt(np.mean(
+                ((sim_form(params, fm, tag) - y) / np.abs(y).max()) ** 2)))
+        return out
+
+    space = list(state["params_space"])
+    base = dict(state["values"])
+    before = per_form(base, "joint0")
+
+    def resid(x):
+        p = {**base, **dict(zip(space, x))}
+        return np.concatenate([
+            (sim_form(p, fm, "joint") - meas[fm]["y"])
+            / np.abs(meas[fm]["y"]).max() / np.sqrt(len(meas[fm]["y"]))
+            for fm in forms])
+
+    x0 = np.array([base[p] for p in space])
+    lb = np.array([OPT_BOUNDS[p][0] for p in space])
+    ub = np.array([OPT_BOUNDS[p][1] for p in space])
+    span = ub - lb
+    x0 = np.clip(x0, lb + 1e-6 * span, ub - 1e-6 * span)   # M3 修复同款：相对余量
+    r = least_squares(resid, x0, bounds=(lb, ub), xtol=1e-5,
+                      x_scale=[X_SCALE[p] for p in space])
+    cand = {**base, **dict(zip(space, r.x))}
+    after = per_form(cand, "joint1")
+
+    qa_bad = [f"{p}={v:.4g} 超出物理范围" for p, v in cand.items()
+              if not (QA_RULES.get(p, (-np.inf, np.inf))[0] <= v
+                      <= QA_RULES.get(p, (-np.inf, np.inf))[1])]
+    accept = (all(after[fm] <= before[fm] * 1.05 + 1e-6 for fm in forms)
+              and max(after.values()) <= max(before.values())
+              and not qa_bad)
+
+    chosen = cand if accept else base
+    final_per = after if accept else before
+    drift = "，".join(f"{fm} {before[fm]:.3%}→{after[fm]:.3%}" for fm in forms)
+    verdict = ("接受" if accept
+               else "回退" + (f"（QA: {'；'.join(qa_bad)}）" if qa_bad else "（验收门①/②未过）"))
+    rmse = max(final_per.values())
+    hist = state["fit_hist"] + [{"joint_refine": True, "before": before,
+                                 "after": after, "accepted": accept,
+                                 "values": {p: float(v) for p, v in chosen.items()}}]
+    return {"values": chosen, "rmse": rmse, "rmse_per_form": final_per,
+            "fit_hist": hist,
+            "log": state["log"] + [
+                f"joint_refine({r.nfev}轮×{len(forms)}形态): {drift}"
+                f" → {verdict}，最差形态 {rmse:.3%}"]}
 
 
 @node("finalize_card")
@@ -254,7 +344,8 @@ def finalize_card(state: S_agent) -> dict:
     budget = {**state["budget"], "sim_count": sess.get_call_count()}
     card = {"device": state["device_id"], "model": "asmhemt",
             "params": state["values"], "space": state["params_space"],
-            "nrmse": state["rmse"], "qa_pass": state["qa_pass"]}
+            "nrmse": state["rmse"], "rmse_per_form": state.get("rmse_per_form"),
+            "qa_pass": state["qa_pass"]}
     hist = state["fit_hist"] + [{"space": list(state["params_space"]),
                                  "values": dict(state["values"]), "rmse": state["rmse"]}]
     return {"final_card": card, "fit_hist": hist,
@@ -276,7 +367,8 @@ def write_logs(state: S_agent) -> dict:
 
 @node("session_close")
 def session_close(state: S_agent) -> dict:
-    """红线保底（卡14 §4）：调用 <10 次则自动补扰动验证点（既攒调用又产证据）。"""
+    """红线保底（卡14 §4）：调用 <10 次则自动补扰动验证点（既攒调用又产证据）。
+    结尾 close_session() 注销单例——M5 多器件连跑时器件间必须断开。"""
     sess = get_session(state["via_mcp"])
     log = list(state["log"])
     n = sess.get_call_count()
@@ -292,7 +384,7 @@ def session_close(state: S_agent) -> dict:
         n = sess.get_call_count()
     budget = {**state["budget"], "sim_count": n,
               "wall_s": round(time.time() - state["budget"]["t0"], 1)}
-    sess.close()
+    close_session()
     return {"budget": budget,
             "log": log + [f"session_close: 调用计数 {n} 次（红线≥{REDLINE_MIN_CALLS}：{'✅' if n >= REDLINE_MIN_CALLS else '❌'}）"
                           f"，耗时 {budget['wall_s']}s"]}
@@ -308,6 +400,7 @@ def build_main():
     g.add_node("init_params", init_params)
     g.add_node("extract", build_extract())       # qa_loop 编译子图（卡11/12/13 验证）
     g.add_node("switch_form", switch_form)       # M2 形态轮转
+    g.add_node("joint_refine", joint_refine)     # M5 跨形态联合精修
     g.add_node("finalize_card", finalize_card)
     g.add_node("write_logs", write_logs)
     g.add_node("session_close", session_close)
@@ -318,8 +411,9 @@ def build_main():
     g.add_edge("init_params", "extract")
     g.add_conditional_edges("extract", route_after_extract,
                             {"switch_form": "switch_form",
-                             "finalize_card": "finalize_card"})
+                             "joint_refine": "joint_refine"})
     g.add_edge("switch_form", "extract")
+    g.add_edge("joint_refine", "finalize_card")
     g.add_edge("finalize_card", "write_logs")
     g.add_edge("write_logs", "session_close")
     g.add_edge("session_close", END)

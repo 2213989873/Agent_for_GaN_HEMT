@@ -1,0 +1,29 @@
+{
+ "device": "yi",
+ "model": "asmhemt",
+ "params": {
+  "voff": -2.200000584484298,
+  "u0": 0.14999881296161946,
+  "rontr1": -0.9999871165260542,
+  "rth0": 19.99666499261531
+ },
+ "space": [
+  "voff",
+  "u0",
+  "rontr1",
+  "rth0"
+ ],
+ "nrmse": 9.94254517970062e-07,
+ "rmse_per_form": {
+  "dc_transfer": 6.987279322822305e-07,
+  "dc_output": 9.94254517970062e-07,
+  "cv_gg": 2.2017990684321696e-07
+ },
+ "qa_pass": true,
+ "git_head": "f0c48ed",
+ "budget": {
+  "sim_count": 2581,
+  "llm_calls": 1,
+  "wall_s": 50.4
+ }
+}

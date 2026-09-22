@@ -1,31 +1,30 @@
 {
- "device_id": "yi",
- "forms": [
-  "dc_transfer",
-  "dc_output"
- ],
- "active_form": "dc_output",
- "data_forms": {
-  "dc_transfer": {
-   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/yi/transfer_yi.csv",
-   "n_points": 121
+ "final_card": {
+  "device": "yi",
+  "model": "asmhemt",
+  "params": {
+   "voff": -2.2000082944039017,
+   "u0": 0.1499966198410429,
+   "rontr1": -0.9999706486240756,
+   "rth0": 19.994690817230833
   },
-  "dc_output": {
-   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/yi/dc_output_yi.csv",
-   "n_points": 847
-  }
+  "space": [
+   "voff",
+   "u0",
+   "rontr1",
+   "rth0"
+  ],
+  "nrmse": 1.3666280837184155e-06,
+  "rmse_per_form": {
+   "dc_transfer": 1.0285709972793294e-06,
+   "dc_output": 1.3666280837184155e-06
+  },
+  "qa_pass": true
  },
- "params_space": [
-  "voff",
-  "u0",
-  "rontr1",
-  "rth0"
- ],
- "values": {
-  "voff": -2.2000082944039017,
-  "u0": 0.1499966198410429,
-  "rontr1": -0.9999706486240756,
-  "rth0": 19.994690817230833
+ "budget": {
+  "sim_count": 2368,
+  "llm_calls": 1,
+  "t0": 1790057504.8311963
  },
  "fit_hist": [
   {
@@ -62,68 +61,6 @@
    "rmse": 1.3666280837184155e-06
   }
  ],
- "best_values": {
-  "voff": -2.2000082944039017,
-  "u0": 0.1499966198410429,
-  "rontr1": -0.9999706486240756,
-  "rth0": 19.994690817230833
- },
- "best_rmse": 1.3666280837184155e-06,
- "rmse": 1.3666280837184155e-06,
- "qa_pass": true,
- "violations": [],
- "n_retry": 0,
- "budget": {
-  "sim_count": 2368,
-  "llm_calls": 1,
-  "t0": 1790057504.8311963,
-  "wall_s": 44.1
- },
- "final_card": {
-  "device": "yi",
-  "model": "asmhemt",
-  "params": {
-   "voff": -2.2000082944039017,
-   "u0": 0.1499966198410429,
-   "rontr1": -0.9999706486240756,
-   "rth0": 19.994690817230833
-  },
-  "space": [
-   "voff",
-   "u0",
-   "rontr1",
-   "rth0"
-  ],
-  "nrmse": 1.3666280837184155e-06,
-  "rmse_per_form": {
-   "dc_transfer": 1.0285709972793294e-06,
-   "dc_output": 1.3666280837184155e-06
-  },
-  "qa_pass": true
- },
- "completed": [
-  "session_open",
-  "load_data",
-  "analyze_data",
-  "init_params",
-  "switch_form",
-  "joint_refine",
-  "finalize_card",
-  "write_logs",
-  "session_close"
- ],
- "forms_done": [
-  "dc_transfer"
- ],
- "rmse_target": 0.003,
- "warm_start": true,
- "family_order": null,
- "freeze": null,
- "rmse_per_form": {
-  "dc_transfer": 1.0285709972793294e-06,
-  "dc_output": 1.3666280837184155e-06
- },
- "via_mcp": false,
  "log": [
   "session_open: 链路 本地直连，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
   "load_data: dc_transfer=121点，dc_output=847点",
@@ -145,8 +82,6 @@
   "optimize(255次仿真): voff=-2.2 u0=0.1499 rontr1=-0.9989 rth0=19.88 → NRMSE=0.00%",
   "physics_qa: ✅ 通过",
   "joint_refine(83轮×2形态): dc_transfer 0.005%→0.000%，dc_output 0.003%→0.000% → 接受，最差形态 0.000%",
-  "finalize_card: {'voff': np.float64(-2.2000082944039017), 'u0': np.float64(0.1499966198410429), 'rontr1': np.float64(-0.9999706486240756), 'rth0': np.float64(19.994690817230833)} NRMSE=0.0001%",
-  "write_logs: run_yi_20260922_141228.json",
-  "session_close: 调用计数 2368 次（红线≥10：✅），耗时 44.1s"
+  "finalize_card: {'voff': np.float64(-2.2000082944039017), 'u0': np.float64(0.1499966198410429), 'rontr1': np.float64(-0.9999706486240756), 'rth0': np.float64(19.994690817230833)} NRMSE=0.0001%"
  ]
 }

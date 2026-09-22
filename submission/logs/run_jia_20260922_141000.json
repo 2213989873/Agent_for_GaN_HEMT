@@ -1,0 +1,74 @@
+{
+ "final_card": {
+  "device": "jia",
+  "model": "asmhemt",
+  "params": {
+   "voff": -2.0000000201020227,
+   "u0": 0.16662356986260926
+  },
+  "space": [
+   "voff",
+   "u0"
+  ],
+  "nrmse": 0.003857218343070125,
+  "rmse_per_form": {
+   "dc_transfer": 0.003857218343070125,
+   "dc_output": 0.0021666474656508007,
+   "cv_gg": 7.05342191138026e-09
+  },
+  "qa_pass": true
+ },
+ "budget": {
+  "sim_count": 81,
+  "llm_calls": 1,
+  "t0": 1790057396.3828804
+ },
+ "fit_hist": [
+  {
+   "joint_refine": true,
+   "before": {
+    "dc_transfer": 0.003857218343070125,
+    "dc_output": 0.0021666474656508007,
+    "cv_gg": 7.05342191138026e-09
+   },
+   "after": {
+    "dc_transfer": 0.0012920493721759094,
+    "dc_output": 0.0022818858695645523,
+    "cv_gg": 0.00023607655362958192
+   },
+   "accepted": false,
+   "values": {
+    "voff": -2.0000000201020227,
+    "u0": 0.16662356986260926
+   }
+  },
+  {
+   "space": [
+    "voff",
+    "u0"
+   ],
+   "values": {
+    "voff": -2.0000000201020227,
+    "u0": 0.16662356986260926
+   },
+   "rmse": 0.003857218343070125
+  }
+ ],
+ "log": [
+  "session_open: 链路 本地直连，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点，dc_output=847点，cv_gg=1198点",
+  "analyze_data: 点数121，峰值0.3664A，首点1e-12，末点0.3664，单调点占比100% → 无明显自热/陷阱迹象。",
+  "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
+  "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
+  "optimize(6次仿真): voff=-2 u0=0.17 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "switch_form: dc_transfer → dc_output（847点），热启动续跑 ['voff', 'u0']，达标线拧紧到 0.3%",
+  "optimize(7次仿真): voff=-2.004 u0=0.1666 → NRMSE=0.18%",
+  "physics_qa: ✅ 通过",
+  "switch_form: dc_output → cv_gg（1198点），热启动续跑 ['voff', 'u0']，达标线拧紧到 0.5%",
+  "optimize(4次仿真)（锁定 ['rontr1', 'rth0', 'u0']）: voff=-2 u0=0.1666 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "joint_refine(4轮×3形态): dc_transfer 0.386%→0.129%，dc_output 0.217%→0.228%，cv_gg 0.000%→0.024% → 回退（验收门①/②未过），最差形态 0.386%",
+  "finalize_card: {'voff': np.float64(-2.0000000201020227), 'u0': np.float64(0.16662356986260926)} NRMSE=0.3857%"
+ ]
+}
