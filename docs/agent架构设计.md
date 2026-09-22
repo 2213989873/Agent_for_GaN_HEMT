@@ -100,7 +100,7 @@ coarse(LLM粗调) → optimize(least_squares精修) → qa_check
 | M2 | 乙器件全流程（自热+陷阱，转移+输出两形态轮转） | `python src/pipeline/run_agent.py --device yi` 无人干预；NRMSE ≤0.6%（卡13/14 基准）；调用计数 ≥10 且落盘自证；expand 双触发器日志可审 | **已验收**（2026-09-21：0.0004% 四参数命中/计数 2001/双触发器日志全记录） | `cfec4da` |
 | M3 | C-V 形态纳入提取（电容族进场，知识表1/2 回填） | `--device jia --forms dc_transfer,cv` 双形态闭环；C-V 拟合 NRMSE 达标线 M3 开工时标定（当前未验证）；知识表1/2 电容行填写并 commit | **已验收**（2026-09-21：jia 0.0000%；丙演示 tbar 进场命中；知识表已回填） | `dc4aacc` |
 | M4 | MCP 链路全流程（接口§3 不变，mock 切换演示） | `run_agent.py --device yi --via-mcp`：结果与 M2 本地直连一致（卡14 零偏差基准 0.6002%）；计数文件 ≥10 | **已验收**（2026-09-22：双形态 NRMSE=0.0030%、sim_count=1534 与 M2 本地直连逐位一致，34.7s；长连接 McpSession + server v2 dict 通道；回归 run_qa jia 0.0000% / run_agent jia 0.0000% / run_qa_mcp 0.6003%） | `d1bf153` |
-| M5 | 双器件连跑 + 提交物生成 | `run_agent.py --devices jia,yi` 一条命令跑完；产出两份模型卡 + 运行日志包（MCP 记录/LLM 统计/决策摘要）；`finalize_card` Schema 校验通过 | 未开始 | —— |
+| M5 | 双器件连跑 + 提交物生成 | `run_agent.py --devices jia,yi` 一条命令跑完；产出两份模型卡 + 运行日志包（MCP 记录/LLM 统计/决策摘要）；`finalize_card` Schema 校验通过 | **已验收**（2026-09-22：一条命令双卡+日志包+Schema ✅；yi 三形态 NRMSE=0.0001% 四参数全命中（rth0=19.997/真值20）；jia 三形态全达标；joint_refine 节点处置 M3 遗留跨形态一致性——bing u0 从补偿值 0.1299 拉回真值 0.17（转移 5.52%→0.0004%），jia 验收门拒收回退实测保守路径；修复 switch_form 被 resume 跳过机制误伤的死循环（REPEATABLE_NODES）） | `f627452` |
 | M6 | 24h 作战 dry run（按任务卡15 时间表压缩） | 作战手册 T0–T5 全块演练记录入档；熔断 A–D 各至少模拟触发一次并有处置证据 | 未开始 | —— |
 
 ## 6. 风险清单与熔断策略
