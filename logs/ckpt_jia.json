@@ -1,18 +1,13 @@
 {
  "device_id": "jia",
  "forms": [
-  "dc_transfer",
-  "cv_gg"
+  "dc_transfer"
  ],
- "active_form": "cv_gg",
+ "active_form": "dc_transfer",
  "data_forms": {
   "dc_transfer": {
    "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/jia/transfer_jia.csv",
    "n_points": 121
-  },
-  "cv_gg": {
-   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/jia/cv_gg_jia.csv",
-   "n_points": 1198
   }
  },
  "params_space": [
@@ -20,7 +15,7 @@
   "u0"
  ],
  "values": {
-  "voff": -2.000000008455622,
+  "voff": -2.0000005042558024,
   "u0": 0.1699998992726888
  },
  "fit_hist": [
@@ -30,39 +25,39 @@
     "u0"
    ],
    "values": {
-    "voff": -2.000000008455622,
+    "voff": -2.0000005042558024,
     "u0": 0.1699998992726888
    },
-   "rmse": 3.0328955301593802e-09
+   "rmse": 6.299342019736293e-08
   }
  ],
  "best_values": {
-  "voff": -2.000000008455622,
+  "voff": -2.0000005042558024,
   "u0": 0.1699998992726888
  },
- "best_rmse": 3.0328955301593802e-09,
- "rmse": 3.0328955301593802e-09,
+ "best_rmse": 6.299342019736293e-08,
+ "rmse": 6.299342019736293e-08,
  "qa_pass": true,
  "violations": [],
  "n_retry": 0,
  "budget": {
-  "sim_count": 22,
+  "sim_count": 18,
   "llm_calls": 1,
-  "t0": 1789981795.244365,
-  "wall_s": 3.4
+  "t0": 1790053715.7002633,
+  "wall_s": 2.9
  },
  "final_card": {
   "device": "jia",
   "model": "asmhemt",
   "params": {
-   "voff": -2.000000008455622,
+   "voff": -2.0000005042558024,
    "u0": 0.1699998992726888
   },
   "space": [
    "voff",
    "u0"
   ],
-  "nrmse": 3.0328955301593802e-09,
+  "nrmse": 6.299342019736293e-08,
   "qa_pass": true
  },
  "completed": [
@@ -70,49 +65,26 @@
   "load_data",
   "analyze_data",
   "init_params",
-  "switch_form",
   "finalize_card",
   "write_logs",
   "session_close"
  ],
- "forms_done": [
-  "dc_transfer"
- ],
- "rmse_target": 0.005,
- "warm_start": true,
- "family_order": [
-  [
-   "voff",
-   "u0"
-  ],
-  [
-   "tbar"
-  ],
-  [
-   "rontr1"
-  ],
-  [
-   "rth0"
-  ]
- ],
- "freeze": [
-  "u0",
-  "rontr1",
-  "rth0"
- ],
+ "forms_done": [],
+ "rmse_target": 0.01,
+ "warm_start": false,
+ "family_order": null,
+ "freeze": null,
+ "via_mcp": false,
  "log": [
-  "session_open: 选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
-  "load_data: dc_transfer=121点，cv_gg=1198点",
+  "session_open: 链路 本地直连，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点",
   "analyze_data: 点数121，峰值0.3664A，首点1e-12，末点0.3664，单调点占比100% → 无明显自热/陷阱迹象。",
   "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
   "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
   "optimize(6次仿真): voff=-2 u0=0.17 → NRMSE=0.00%",
   "physics_qa: ✅ 通过",
-  "switch_form: dc_transfer → cv_gg（1198点），热启动续跑 ['voff', 'u0']，达标线拧紧到 0.5%",
-  "optimize(2次仿真)（锁定 ['rontr1', 'rth0', 'u0']）: voff=-2 u0=0.17 → NRMSE=0.00%",
-  "physics_qa: ✅ 通过",
-  "finalize_card: {'voff': np.float64(-2.000000008455622), 'u0': np.float64(0.1699998992726888)} NRMSE=0.0000%",
-  "write_logs: run_jia_20260921_170958.json",
-  "session_close: 调用计数 22 次（红线≥10：✅），耗时 3.4s"
+  "finalize_card: {'voff': np.float64(-2.0000005042558024), 'u0': np.float64(0.1699998992726888)} NRMSE=0.0000%",
+  "write_logs: run_jia_20260922_130838.json",
+  "session_close: 调用计数 18 次（红线≥10：✅），耗时 2.9s"
  ]
 }

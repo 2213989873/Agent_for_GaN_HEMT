@@ -4,7 +4,7 @@
   python src/pipeline/run_agent.py --device jia            # 全新跑
   python src/pipeline/run_agent.py --device jia --resume   # 断点续跑
   python src/pipeline/run_agent.py --device yi --forms dc_transfer
-  --via-mcp：M4 内容，当前报错退出。
+  --via-mcp：M4 链路——仿真经 MCP Server（长连接），与本地直连同签名切换。
 
 M1 验收判据（总进度 待完成区）：
   --device jia 全程无人干预；NRMSE ≤0.01%（卡12 基准 0.0000%/6 次仿真）；
@@ -40,8 +40,6 @@ def main() -> None:
     ap.add_argument("--resume", action="store_true")
     args = ap.parse_args()
 
-    if args.via_mcp:
-        sys.exit("--via-mcp 为 M4 内容，当前未实现（卡14 已验证协议链路，M4 接主图）")
     forms = [f.strip() for f in args.forms.split(",") if f.strip()]
 
     init = fresh_state(args.device, forms, args.via_mcp)

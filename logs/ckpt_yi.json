@@ -58,8 +58,8 @@
  "budget": {
   "sim_count": 1534,
   "llm_calls": 1,
-  "t0": 1789981800.8795345,
-  "wall_s": 36.3
+  "t0": 1790053624.7163231,
+  "wall_s": 34.7
  },
  "final_card": {
   "device": "yi",
@@ -96,8 +96,9 @@
  "warm_start": true,
  "family_order": null,
  "freeze": null,
+ "via_mcp": true,
  "log": [
-  "session_open: 选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "session_open: 链路 MCP，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
   "load_data: dc_transfer=121点，dc_output=847点",
   "analyze_data: 点数121，峰值0.2888A，首点1e-12，末点0.2888，单调点占比98% → 无明显自热/陷阱迹象。",
   "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
@@ -117,7 +118,7 @@
   "optimize(255次仿真): voff=-2.2 u0=0.1499 rontr1=-0.9989 rth0=19.88 → NRMSE=0.00%",
   "physics_qa: ✅ 通过",
   "finalize_card: {'voff': np.float64(-2.200217560565153), 'u0': np.float64(0.14990991879349963), 'rontr1': np.float64(-0.9988705404087592), 'rth0': np.float64(19.87592832620534)} NRMSE=0.0030%",
-  "write_logs: run_yi_20260921_171037.json",
-  "session_close: 调用计数 1534 次（红线≥10：✅），耗时 36.3s"
+  "write_logs: run_yi_20260922_130739.json",
+  "session_close: 调用计数 1534 次（红线≥10：✅），耗时 34.7s"
  ]
 }

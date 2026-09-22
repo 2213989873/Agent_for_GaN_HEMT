@@ -1,0 +1,64 @@
+{
+ "final_card": {
+  "device": "yi",
+  "model": "asmhemt",
+  "params": {
+   "voff": -2.200217560565153,
+   "u0": 0.14990991879349963,
+   "rontr1": -0.9988705404087592,
+   "rth0": 19.87592832620534
+  },
+  "space": [
+   "voff",
+   "u0",
+   "rontr1",
+   "rth0"
+  ],
+  "nrmse": 3.0271912022964676e-05,
+  "qa_pass": true
+ },
+ "budget": {
+  "sim_count": 1534,
+  "llm_calls": 1,
+  "t0": 1790053624.7163231
+ },
+ "fit_hist": [
+  {
+   "space": [
+    "voff",
+    "u0",
+    "rontr1",
+    "rth0"
+   ],
+   "values": {
+    "voff": -2.200217560565153,
+    "u0": 0.14990991879349963,
+    "rontr1": -0.9988705404087592,
+    "rth0": 19.87592832620534
+   },
+   "rmse": 3.0271912022964676e-05
+  }
+ ],
+ "log": [
+  "session_open: 链路 MCP，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点，dc_output=847点",
+  "analyze_data: 点数121，峰值0.2888A，首点1e-12，末点0.2888，单调点占比98% → 无明显自热/陷阱迹象。",
+  "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
+  "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
+  "optimize(11次仿真): voff=-2.517 u0=0.08401 → NRMSE=2.70%",
+  "physics_qa: ❌ 驳回——u0=0.08401 超出物理范围 [0.1, 0.25]",
+  "coarse: 初值 {'voff': -2.1, 'u0': 0.15}（驳回史: u0=0.08401 超出物理范围 [0.1, 0.25]）",
+  "optimize(11次仿真): voff=-2.518 u0=0.08397 → NRMSE=2.70%",
+  "physics_qa: ❌ 驳回——u0=0.08397 超出物理范围 [0.1, 0.25]",
+  "expand: QA 反复驳回=撞天花板 → 新参数族进场 ['rontr1']",
+  "optimize(47次仿真): voff=-2.2 u0=0.15 rontr1=-0.9999 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "switch_form: dc_transfer → dc_output（847点），热启动续跑 ['voff', 'u0', 'rontr1']，达标线拧紧到 0.3%",
+  "optimize(10次仿真): voff=-2.236 u0=0.1355 rontr1=-0.8216 → NRMSE=0.60%",
+  "physics_qa: ✅ 通过",
+  "expand: NRMSE 未达标，扩空间追优 → 新参数族进场 ['rth0']",
+  "optimize(255次仿真): voff=-2.2 u0=0.1499 rontr1=-0.9989 rth0=19.88 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "finalize_card: {'voff': np.float64(-2.200217560565153), 'u0': np.float64(0.14990991879349963), 'rontr1': np.float64(-0.9988705404087592), 'rth0': np.float64(19.87592832620534)} NRMSE=0.0030%"
+ ]
+}

@@ -89,7 +89,8 @@ def _save_ckpt(state: S_agent) -> None:
             ("device_id", "forms", "active_form", "data_forms", "params_space",
              "values", "fit_hist", "best_values", "best_rmse", "rmse", "qa_pass",
              "violations", "n_retry", "budget", "final_card", "completed",
-             "forms_done", "rmse_target", "warm_start", "family_order", "freeze", "log")}
+             "forms_done", "rmse_target", "warm_start", "family_order", "freeze",
+             "via_mcp", "log")}
     _ckpt_path(state["device_id"]).write_text(
         json.dumps(snap, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
 
@@ -102,7 +103,7 @@ def load_ckpt(device_id: str) -> dict | None:
 def rehydrate(state: S_agent) -> S_agent:
     """resume 补水：ckpt 只存可序列化字段，sim_fn/数组/session 按 active_form
     确定性重建（与 load_data 同逻辑，不产生新副作用、不写日志）。"""
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     if sess.handle is None:
         sess.select_model("asmhemt")
     handle = sess.handle
@@ -138,17 +139,18 @@ def node(name):
 
 @node("session_open")
 def session_open(state: S_agent) -> dict:
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     sess.reset_count()
     handle = sess.select_model("asmhemt")          # 默认带 rdsmod=1（卡07 铁律）
     budget = {"sim_count": 0, "llm_calls": 0, "t0": time.time()}
     return {"budget": budget,
-            "log": state["log"] + [f"session_open: 选型 asmhemt，开关 {handle.switches}，预算计数清零"]}
+            "log": state["log"] + [f"session_open: 链路 {'MCP' if state['via_mcp'] else '本地直连'}，"
+                                   f"选型 asmhemt，开关 {handle.switches}，预算计数清零"]}
 
 
 @node("load_data")
 def load_data(state: S_agent) -> dict:
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     data_forms, first = {}, None
     for form in state["forms"]:
         m = sess.load_measurement(state["device_id"], form)
@@ -217,7 +219,7 @@ def switch_form(state: S_agent) -> dict:
     不重跑 coarse——第一形态提出的参数是后续形态的起点（知识表1 提参顺序），
     重跑 coarse 会把真值初值冲掉（卡11 教训：LLM 初值也会被吸引盆拉走，
     但没理由主动放弃已到手的解）。"""
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     handle = sess.handle
     done = state["forms_done"] + [state["active_form"]]
     form = state["forms"][len(done)]
@@ -248,7 +250,7 @@ def route_after_extract(state: S_agent) -> str:
 
 @node("finalize_card")
 def finalize_card(state: S_agent) -> dict:
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     budget = {**state["budget"], "sim_count": sess.get_call_count()}
     card = {"device": state["device_id"], "model": "asmhemt",
             "params": state["values"], "space": state["params_space"],
@@ -275,7 +277,7 @@ def write_logs(state: S_agent) -> dict:
 @node("session_close")
 def session_close(state: S_agent) -> dict:
     """红线保底（卡14 §4）：调用 <10 次则自动补扰动验证点（既攒调用又产证据）。"""
-    sess = get_session()
+    sess = get_session(state["via_mcp"])
     log = list(state["log"])
     n = sess.get_call_count()
     if n < REDLINE_MIN_CALLS:

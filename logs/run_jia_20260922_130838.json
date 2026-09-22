@@ -1,0 +1,44 @@
+{
+ "final_card": {
+  "device": "jia",
+  "model": "asmhemt",
+  "params": {
+   "voff": -2.0000005042558024,
+   "u0": 0.1699998992726888
+  },
+  "space": [
+   "voff",
+   "u0"
+  ],
+  "nrmse": 6.299342019736293e-08,
+  "qa_pass": true
+ },
+ "budget": {
+  "sim_count": 18,
+  "llm_calls": 1,
+  "t0": 1790053715.7002633
+ },
+ "fit_hist": [
+  {
+   "space": [
+    "voff",
+    "u0"
+   ],
+   "values": {
+    "voff": -2.0000005042558024,
+    "u0": 0.1699998992726888
+   },
+   "rmse": 6.299342019736293e-08
+  }
+ ],
+ "log": [
+  "session_open: 链路 本地直连，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
+  "load_data: dc_transfer=121点",
+  "analyze_data: 点数121，峰值0.3664A，首点1e-12，末点0.3664，单调点占比100% → 无明显自热/陷阱迹象。",
+  "init_params: 起步空间 ['voff', 'u0']，初值 {'voff': -2.0, 'u0': 0.17}，达标线 1.0%",
+  "coarse: 初值 {'voff': -2.2, 'u0': 0.15}（驳回史: 无）",
+  "optimize(6次仿真): voff=-2 u0=0.17 → NRMSE=0.00%",
+  "physics_qa: ✅ 通过",
+  "finalize_card: {'voff': np.float64(-2.0000005042558024), 'u0': np.float64(0.1699998992726888)} NRMSE=0.0000%"
+ ]
+}

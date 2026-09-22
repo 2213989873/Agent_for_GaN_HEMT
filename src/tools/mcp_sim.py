@@ -32,7 +32,9 @@ def get_count() -> int:
 
 async def _call(params: dict) -> np.ndarray:
     async with Client(SERVER_PATH) as client:
-        r = await client.call_tool("run_iv_simulation", params)
+        r = await client.call_tool(
+            "run_simulation",
+            {"params": dict(params), "sim_spec": {"form": "dc_output"}})
         payload = json.loads(r.content[0].text)
         return np.array(payload["id"])
 
