@@ -99,7 +99,7 @@ coarse(LLM粗调) → optimize(least_squares精修) → qa_check
 | **M1** | **甲器件最小全流程无人干预跑通**（主图+extract 子图+checkpoint，2–3 参数族 voff/u0[/rontr1]） | `python src/pipeline/run_agent.py --device jia` 全程无人干预；NRMSE ≤0.01%（卡12 基准 0.0000%/6 次仿真）；QA 全过；日志含预算计数；kill 后 `--resume` 续跑成功 | **已验收**（2026-09-20：0.0000%/QA ✅/计数 18≥10；强杀续跑成功；回归双器件绿） | `3e7196c` |
 | M2 | 乙器件全流程（自热+陷阱，转移+输出两形态轮转） | `python src/pipeline/run_agent.py --device yi` 无人干预；NRMSE ≤0.6%（卡13/14 基准）；调用计数 ≥10 且落盘自证；expand 双触发器日志可审 | **已验收**（2026-09-21：0.0004% 四参数命中/计数 2001/双触发器日志全记录） | `cfec4da` |
 | M3 | C-V 形态纳入提取（电容族进场，知识表1/2 回填） | `--device jia --forms dc_transfer,cv` 双形态闭环；C-V 拟合 NRMSE 达标线 M3 开工时标定（当前未验证）；知识表1/2 电容行填写并 commit | **已验收**（2026-09-21：jia 0.0000%；丙演示 tbar 进场命中；知识表已回填） | `dc4aacc` |
-| M4 | MCP 链路全流程（接口§3 不变，mock 切换演示） | `run_agent.py --device yi --via-mcp`：结果与 M2 本地直连一致（卡14 零偏差基准 0.6002%）；计数文件 ≥10 | 未开始 | —— |
+| M4 | MCP 链路全流程（接口§3 不变，mock 切换演示） | `run_agent.py --device yi --via-mcp`：结果与 M2 本地直连一致（卡14 零偏差基准 0.6002%）；计数文件 ≥10 | **已验收**（2026-09-22：双形态 NRMSE=0.0030%、sim_count=1534 与 M2 本地直连逐位一致，34.7s；长连接 McpSession + server v2 dict 通道；回归 run_qa jia 0.0000% / run_agent jia 0.0000% / run_qa_mcp 0.6003%） | `d1bf153` |
 | M5 | 双器件连跑 + 提交物生成 | `run_agent.py --devices jia,yi` 一条命令跑完；产出两份模型卡 + 运行日志包（MCP 记录/LLM 统计/决策摘要）；`finalize_card` Schema 校验通过 | 未开始 | —— |
 | M6 | 24h 作战 dry run（按任务卡15 时间表压缩） | 作战手册 T0–T5 全块演练记录入档；熔断 A–D 各至少模拟触发一次并有处置证据 | 未开始 | —— |
 
