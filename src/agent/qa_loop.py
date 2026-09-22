@@ -75,7 +75,9 @@ class S(TypedDict):
 
 
 def coarse(state: S) -> dict:
-    """LLM 粗调给初值；带 QA 驳回历史时会针对性换方向。"""
+    """LLM 粗调给初值；带 QA 驳回历史时会针对性换方向。
+    熔断 C（卡15）：LLM 调用失败 → 降级 DEFAULTS 初值，纯优化器闭环照跑
+    （卡11 已证：优化器+QA+expand 不依赖 LLM 质量）。"""
     space = state["params_space"]
     fail_info = "；".join(state["violations"]) if state["violations"] else "无"
     prompt = f"""你是 GaN HEMT 建模工程师。为转移特性（Vd=1V）提取给优化器初值。
@@ -83,22 +85,26 @@ def coarse(state: S) -> dict:
 上次 QA 驳回原因：{fail_info}（若"无"则是首轮，给常规初值）。
 参考：甲器件 voff=-2.0, u0=0.17；新器件阈值一般略负、迁移率略低。
 只输出 JSON：{{{", ".join(f'"{p}": 数值' for p in space)}}}"""
-    resp = client.chat.completions.create(
-        model="deepseek-chat",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=150, temperature=0)
-    m = re.search(r"\{[^{}]*\}", resp.choices[0].message.content, re.S)
     values = {p: DEFAULTS[p] for p in space}
-    if m:
-        try:
-            obj = json.loads(m.group(0))
-            for p in space:
-                if p in obj:
-                    values[p] = float(obj[p])
-        except (json.JSONDecodeError, ValueError):
-            pass
+    note = ""
+    try:
+        resp = client.chat.completions.create(
+            model="deepseek-chat",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=150, temperature=0)
+        m = re.search(r"\{[^{}]*\}", resp.choices[0].message.content, re.S)
+        if m:
+            try:
+                obj = json.loads(m.group(0))
+                for p in space:
+                    if p in obj:
+                        values[p] = float(obj[p])
+            except (json.JSONDecodeError, ValueError):
+                note = "（JSON 解析失败，用默认值）"
+    except Exception as e:                                # noqa: BLE001
+        note = f"（LLM 不可用：{type(e).__name__}，降级 DEFAULTS——熔断 C）"
     return {"values": values,
-            "log": state["log"] + [f"coarse: 初值 { {p: round(v, 4) for p, v in values.items()} }（驳回史: {fail_info}）"]}
+            "log": state["log"] + [f"coarse: 初值 { {p: round(v, 4) for p, v in values.items()} }（驳回史: {fail_info}）{note}"]}
 
 
 def optimize(state: S) -> dict:

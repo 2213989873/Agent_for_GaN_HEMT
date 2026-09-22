@@ -1,12 +1,13 @@
 {
- "generated_at": "2026-09-22 14:10:51",
- "git_head": "f0c48ed",
+ "generated_at": "2026-09-22 17:03:50",
+ "git_head": "1869c35",
  "devices": {
   "jia": {
    "card": "jia_modelcard.json",
    "inc": "jia_modelcard.inc",
    "schema_ok": true,
-   "violations": [],
+   "errors": [],
+   "warnings": [],
    "rmse_per_form": {
     "dc_transfer": 0.003857218343070125,
     "dc_output": 0.0021666474656508007,
@@ -19,7 +20,8 @@
    "card": "yi_modelcard.json",
    "inc": "yi_modelcard.inc",
    "schema_ok": true,
-   "violations": [],
+   "errors": [],
+   "warnings": [],
    "rmse_per_form": {
     "dc_transfer": 6.987279322822305e-07,
     "dc_output": 9.94254517970062e-07,

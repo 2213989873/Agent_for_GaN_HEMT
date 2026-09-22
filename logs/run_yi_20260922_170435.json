@@ -1,56 +1,4 @@
 {
- "device_id": "yi",
- "forms": [
-  "dc_transfer"
- ],
- "active_form": "dc_transfer",
- "data_forms": {
-  "dc_transfer": {
-   "path": "/home/zhengjp2/projects/gan-hemt-agent/data/devices/yi/transfer_yi.csv",
-   "n_points": 121
-  }
- },
- "params_space": [
-  "voff",
-  "u0",
-  "rontr1"
- ],
- "values": {
-  "voff": -2.200029168667514,
-  "u0": 0.14999052131555884,
-  "rontr1": -0.9999186416035236
- },
- "fit_hist": [
-  {
-   "space": [
-    "voff",
-    "u0",
-    "rontr1"
-   ],
-   "values": {
-    "voff": -2.200029168667514,
-    "u0": 0.14999052131555884,
-    "rontr1": -0.9999186416035236
-   },
-   "rmse": 2.6067007870847706e-06
-  }
- ],
- "best_values": {
-  "voff": -2.200029168667514,
-  "u0": 0.14999052131555884,
-  "rontr1": -0.9999186416035236
- },
- "best_rmse": 2.6067007870847706e-06,
- "rmse": 2.6067007870847706e-06,
- "qa_pass": true,
- "violations": [],
- "n_retry": 0,
- "budget": {
-  "sim_count": 266,
-  "llm_calls": 0,
-  "t0": 1790067871.5767422,
-  "wall_s": 4.1
- },
  "final_card": {
   "device": "yi",
   "model": "asmhemt",
@@ -70,25 +18,26 @@
   },
   "qa_pass": true
  },
- "completed": [
-  "session_open",
-  "load_data",
-  "analyze_data",
-  "init_params",
-  "joint_refine",
-  "finalize_card",
-  "write_logs",
-  "session_close"
- ],
- "forms_done": [],
- "rmse_target": 0.01,
- "warm_start": false,
- "family_order": null,
- "freeze": null,
- "rmse_per_form": {
-  "dc_transfer": 2.6067007870847706e-06
+ "budget": {
+  "sim_count": 266,
+  "llm_calls": 0,
+  "t0": 1790067871.5767422
  },
- "via_mcp": false,
+ "fit_hist": [
+  {
+   "space": [
+    "voff",
+    "u0",
+    "rontr1"
+   ],
+   "values": {
+    "voff": -2.200029168667514,
+    "u0": 0.14999052131555884,
+    "rontr1": -0.9999186416035236
+   },
+   "rmse": 2.6067007870847706e-06
+  }
+ ],
  "log": [
   "session_open: 链路 本地直连，选型 asmhemt，开关 {'rdsmod': 1}，预算计数清零",
   "load_data: dc_transfer=121点",
@@ -104,8 +53,6 @@
   "optimize(45次仿真): voff=-2.2 u0=0.15 rontr1=-0.9999 → NRMSE=0.00%",
   "physics_qa: ✅ 通过",
   "joint_refine: 单形态，跳过联合精修",
-  "finalize_card: {'voff': np.float64(-2.200029168667514), 'u0': np.float64(0.14999052131555884), 'rontr1': np.float64(-0.9999186416035236)} NRMSE=0.0003%",
-  "write_logs: run_yi_20260922_170435.json",
-  "session_close: 调用计数 266 次（红线≥10：✅），耗时 4.1s"
+  "finalize_card: {'voff': np.float64(-2.200029168667514), 'u0': np.float64(0.14999052131555884), 'rontr1': np.float64(-0.9999186416035236)} NRMSE=0.0003%"
  ]
 }

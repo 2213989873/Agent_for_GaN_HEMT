@@ -8,13 +8,17 @@
   McpSession   —— 经 mock/真 Primarius MCP Server。长连接：后台线程跑专属
                   asyncio loop，fastmcp Client 一次 __aenter__ 复用到 close——
                   卡14 "每次调用重启 stdio 子进程"模式废止（1500+ 次仿真不可行）。
-                  测试日只换 MCP_SERVER_PATH 即切真接口（HTTP/SSE 传输同理）。
+                  熔断 D（卡15，M6 落地）：连接建立指数退避重试（1/2/4/8/16s），
+                  运行期掉线自动重连一次；环境变量 MCP_SERVER_PATH 可覆盖 server
+                  路径（T0 适配：测试日指向组委会真 server 不改代码）。
 会话单例：get_session(via_mcp) —— 状态里不放不可序列化对象（main_graph 约定）。
 """
 import asyncio
 import json
+import os
 import sys
 import threading
+import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -25,7 +29,13 @@ sys.path.insert(0, str(ROOT))
 from src.tools import sim_tools as st  # noqa: E402
 
 DEVICE_DIR = ROOT / "data" / "devices"
-MCP_SERVER_PATH = ROOT / "src" / "tools" / "mcp_server_mock.py"
+# T0 适配/熔断 D：MCP_SERVER_PATH 环境变量可覆盖（测试日指向组委会真 server）
+MCP_SERVER_PATH = Path(os.environ.get(
+    "MCP_SERVER_PATH", str(ROOT / "src" / "tools" / "mcp_server_mock.py")))
+
+# 熔断 D 指数退避序列（dry run 压缩版，总窗 ~31s；测试日手册口径：连续 10 分钟
+# 不可用上报组委会并截图留证——到时把序列放宽到 (10,20,40,...,480) 即可）
+RETRY_DELAYS = (1, 2, 4, 8, 16)
 
 # 数据形态注册表：form -> (目标文件模板, 解析方式)
 FORM_FILES = {
@@ -136,22 +146,59 @@ class _McpLink:
     """后台线程 + 专属 asyncio loop 上的长连接 fastmcp Client。
 
     一次 __aenter__ 后所有 call_tool 复用同一 stdio 子进程；
-    所有协程经 run_coroutine_threadsafe 调度到该 loop，避免跨 loop 绑定冲突。"""
+    所有协程经 run_coroutine_threadsafe 调度到该 loop，避免跨 loop 绑定冲突。
+    熔断 D：建连指数退避（RETRY_DELAYS）；运行期掉线重连一次再试；
+    server 端业务错误（ToolError）不重试——重连治不了它。"""
 
     def __init__(self, server_path: Path):
         from fastmcp import Client
+        self._client_cls = Client
+        self._server_path = Path(server_path)
         self._loop = asyncio.new_event_loop()
         self._thread = threading.Thread(target=self._loop.run_forever,
                                         daemon=True, name="mcp-link")
         self._thread.start()
-        self._client = Client(Path(server_path))
-        self._call(self._client.__aenter__(), timeout=60)
+        self._connect()
+
+    def _connect(self) -> None:
+        last: Exception | None = None
+        for i, delay in enumerate((0, *RETRY_DELAYS)):
+            if delay:
+                print(f"[mcp-link] 连接失败（{type(last).__name__}），"
+                      f"{delay}s 后第 {i}/{len(RETRY_DELAYS)} 次重试……", flush=True)
+                time.sleep(delay)
+            try:
+                self._client = self._client_cls(self._server_path)
+                self._call(self._client.__aenter__(), timeout=60)
+                if i:
+                    print(f"[mcp-link] 第 {i} 次重试成功", flush=True)
+                return
+            except Exception as e:                     # noqa: BLE001
+                last = e
+        raise RuntimeError(
+            f"MCP 连续 {len(RETRY_DELAYS) + 1} 次连接失败（熔断 D）：{last}\n"
+            f"处置：按作战手册上报组委会并截图留证；server={self._server_path}")
 
     def _call(self, coro, timeout: float = 300.0):
         return asyncio.run_coroutine_threadsafe(coro, self._loop).result(timeout)
 
     def call_tool(self, name: str, args: dict):
-        return self._call(self._client.call_tool(name, args))
+        try:
+            return self._call(self._client.call_tool(name, args))
+        except Exception as e:                         # noqa: BLE001
+            if "ToolError" in type(e).__name__:        # 业务错误直接抛
+                raise
+            print(f"[mcp-link] 调用中断（{type(e).__name__}），重连后重试一次……",
+                  flush=True)
+            self._reconnect()
+            return self._call(self._client.call_tool(name, args))
+
+    def _reconnect(self) -> None:
+        try:
+            self._call(self._client.__aexit__(None, None, None), timeout=10)
+        except Exception:                              # noqa: BLE001
+            pass
+        self._connect()
 
     def close(self) -> None:
         try:

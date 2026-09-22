@@ -20,10 +20,10 @@
   "cv_gg": 2.2017990684321696e-07
  },
  "qa_pass": true,
- "git_head": "f0c48ed",
+ "git_head": "1869c35",
  "budget": {
   "sim_count": 2581,
   "llm_calls": 1,
-  "wall_s": 50.4
+  "wall_s": 60.9
  }
 }

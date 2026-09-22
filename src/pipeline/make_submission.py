@@ -50,29 +50,33 @@ def _inc_text(dev: str, card: dict) -> str:
             f".model {dev}_asmhemt asmhemt ({sw} {params})\n")
 
 
-def validate_card(card: dict) -> list:
-    """Schema 校验：返回违规列表（空=通过）。"""
-    bad = [f"缺必填字段 {k}" for k in REQUIRED if k not in card]
-    if bad:
-        return bad
+def validate_card(card: dict) -> tuple:
+    """Schema 校验：返回 (errors, warnings)。
+    errors=硬项（必填字段/参数名枚举/QA 物理范围/qa_pass）——不过即拒收；
+    warnings=软项（NRMSE 超达标线）——熔断 B 保底解允许带 warning 交卷
+    （作战手册够用原则：QA 乘性因子保住，NRMSE 评分项打折，卡13 量化依据）。"""
+    errors = [f"缺必填字段 {k}" for k in REQUIRED if k not in card]
+    if errors:
+        return errors, []
     for p in card["params"]:
         if p not in QA_RULES:
-            bad.append(f"参数 {p} 不在已知集合 {sorted(QA_RULES)}")
+            errors.append(f"参数 {p} 不在已知集合 {sorted(QA_RULES)}")
     for p, v in card["params"].items():
         lo, hi = QA_RULES.get(p, (-float("inf"), float("inf")))
         if not (lo <= v <= hi):
-            bad.append(f"{p}={v:.4g} 超出物理范围 [{lo:.4g}, {hi:.4g}]")
+            errors.append(f"{p}={v:.4g} 超出物理范围 [{lo:.4g}, {hi:.4g}]")
     if not card.get("qa_pass"):
-        bad.append("qa_pass=False")
+        errors.append("qa_pass=False")
+    warnings = []
     per = card.get("rmse_per_form") or {}
     if per:
         for f, r in per.items():
             t = FORM_TARGET.get(f, 0.01)
             if r > t:
-                bad.append(f"形态 {f} NRMSE={r:.3%} 超达标线 {t:.1%}")
+                warnings.append(f"形态 {f} NRMSE={r:.3%} 超达标线 {t:.1%}（熔断 B 软项）")
     elif not (0 <= (card.get("nrmse") or 9) < 0.01):
-        bad.append(f"NRMSE={card.get('nrmse')} 异常（无逐形态明细时要求 <1%）")
-    return bad
+        warnings.append(f"NRMSE={card.get('nrmse')} 超 1%（无逐形态明细，熔断 B 软项）")
+    return errors, warnings
 
 
 def build_submission(results: dict) -> tuple:
@@ -87,19 +91,21 @@ def build_submission(results: dict) -> tuple:
         card = dict(final["final_card"])
         card["git_head"] = head
         card["budget"] = {k: v for k, v in final["budget"].items() if k != "t0"}
-        bad = validate_card(card)
+        errors, warnings = validate_card(card)
         manifest["devices"][dev] = {
             "card": f"{dev}_modelcard.json", "inc": f"{dev}_modelcard.inc",
-            "schema_ok": not bad, "violations": bad,
+            "schema_ok": not errors, "errors": errors, "warnings": warnings,
             "rmse_per_form": card.get("rmse_per_form"),
             "sim_count": card["budget"].get("sim_count"),
             "llm_calls": card["budget"].get("llm_calls")}
         (SUB_DIR / f"{dev}_modelcard.json").write_text(
             json.dumps(card, ensure_ascii=False, default=str, indent=1), encoding="utf-8")
         (SUB_DIR / f"{dev}_modelcard.inc").write_text(_inc_text(dev, card), encoding="utf-8")
-        if bad:
+        if errors:
             manifest["schema_ok"] = False
-            problems += [f"{dev}: {b}" for b in bad]
+            problems += [f"{dev}: {b}" for b in errors]
+        for w in warnings:
+            print(f"  ⚠️ {dev}: {w}")
     for dev in results:                              # 日志包：各器件最新 run json
         runs = [p for p in sorted((ROOT / "logs").glob(f"run_{dev}_*.json"))
                 if not p.name.endswith(".prev")]
