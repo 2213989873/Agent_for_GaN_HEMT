@@ -102,6 +102,7 @@ coarse(LLM粗调) → optimize(least_squares精修) → qa_check
 | M4 | MCP 链路全流程（接口§3 不变，mock 切换演示） | `run_agent.py --device yi --via-mcp`：结果与 M2 本地直连一致（卡14 零偏差基准 0.6002%）；计数文件 ≥10 | **已验收**（2026-09-22：双形态 NRMSE=0.0030%、sim_count=1534 与 M2 本地直连逐位一致，34.7s；长连接 McpSession + server v2 dict 通道；回归 run_qa jia 0.0000% / run_agent jia 0.0000% / run_qa_mcp 0.6003%） | `d1bf153` |
 | M5 | 双器件连跑 + 提交物生成 | `run_agent.py --devices jia,yi` 一条命令跑完；产出两份模型卡 + 运行日志包（MCP 记录/LLM 统计/决策摘要）；`finalize_card` Schema 校验通过 | **已验收**（2026-09-22：一条命令双卡+日志包+Schema ✅；yi 三形态 NRMSE=0.0001% 四参数全命中（rth0=19.997/真值20）；jia 三形态全达标；joint_refine 节点处置 M3 遗留跨形态一致性——bing u0 从补偿值 0.1299 拉回真值 0.17（转移 5.52%→0.0004%），jia 验收门拒收回退实测保守路径；修复 switch_form 被 resume 跳过机制误伤的死循环（REPEATABLE_NODES）） | `f627452` |
 | M6 | 24h 作战 dry run（按任务卡15 时间表压缩） | 作战手册 T0–T5 全块演练记录入档；熔断 A–D 各至少模拟触发一次并有处置证据 | **已验收**（2026-09-22：T0–T5 全块演练入档（`docs/M6-dryrun演练记录.md`）；熔断 A–D 各触发一次有处置证据；抓出并修复三个熔断名存实亡问题：coarse LLM 兜底、_McpLink 指数退避+重连、Schema ERROR/WARN 两级） | 见记录文档同批 commit |
+| M7 | PMMS 真链路适配（PmmsSession 编排层 + 计数/BUSY 退避/文本解析包装 + 数据 I/O 打通 + 运行总结生成器 + S 参数/Pulse I-V 补课评估） | 甲器件真链路最小闭环：generate_project→load_data→load_model→view→start_optimize→get_job_status→dump_report→save_model 全程无人干预；红线计数落盘 ≥10；导出模型卡与本地基准对拍；运行总结随模型卡同产 | 未开始（设计评审中，输入 `docs/PMMS接口映射与适配评估.md`；彩排链路 `docs/任务卡-16-PMMS真链路彩排.md`） | —— |
 
 ## 6. 风险清单与熔断策略
 
