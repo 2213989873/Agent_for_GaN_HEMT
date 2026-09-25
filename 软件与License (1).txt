@@ -1,0 +1,76 @@
+# 软件与License
+
+## MeQLab软件
+
+### 版本信息
+- **软件名称**：MS-MeQLab
+- **版本号**：1.26.1
+- **发布日期**：2024-09-16
+- **平台**：Linux x86_64
+
+### 下载方式——在“资源下载”页面下载
+- `MS-MeQLab_1.26.1_x86_202609161536.tar.gz`
+
+---
+
+## License配置
+
+### License服务器信息
+```
+服务器地址：121.199.160.165
+端口：15281
+```
+
+### 配置方法
+
+#### 1. 解压软件包
+```bash
+tar -xzf MS-MeQLab_1.26.1_x86_202609161536.tar.gz
+```
+
+#### 2. 配置License
+PRIMARIUS_LICENSE_FILE=15281@121.199.160.165
+
+#### 3. 验证License
+```bash
+# 运行软件，若无License错误则配置成功
+cd ~/MS-MeQLab/bin
+./MS-MeQLab
+打开MeQLab后依次勾选：
+
+   {              √Primarius
+
+                                 }
+
+   {√BaseBand   √RF
+
+   √LibMonitor   √AutoExtraction
+
+                                 }
+
+   {              √ParallelNano   }
+
+4. 即可进入MeQLab
+```
+
+如果软件启动时**没有报License error**，说明License配置正确。
+
+---
+
+
+
+## 常见问题
+
+### Q1: License连接失败怎么办？
+**A**: 检查网络是否能访问License服务器：
+```bash
+telnet 121.199.160.165 15281
+# 或者
+nc -zv 121.199.160.165 15281
+```
+
+### Q2: 软件运行报错？
+**A**: 确保：
+- 使用Linux x86_64系统
+- 已正确配置License
+- 检查软件包完整性
