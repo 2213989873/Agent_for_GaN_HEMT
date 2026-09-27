@@ -1,0 +1,53 @@
+# P2 真链路冒烟 · run2 控制台输出存档（2026-09-28 00:52 北京时间 / UTC 16:52）
+# 背景：用户通报 NanoSpice 问题已解决，按要求重跑全真链路（run_smoke2.sh：预热→等端口→p2_smoke.py）
+# 结果：与 run1 完全一致——add_model_source code 8，返回文本 sha256=300a77d6…9079 与 run1 三次失败逐字节相同
+# 命令：wsl -d Ubuntu -- bash -lc "… && bash run_smoke2.sh"
+
+LAUNCH_PID=1147399
+PORT_UP after ~160s
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 00:52:57,905 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 00:52:57,905 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 00:52:57,906 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 00:52:58,042 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 35932, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 00:52:58,560 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 00:52:58,560 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 00:52:58,577 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 00:52:58,577 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 00:52:58,578 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 00:52:58,578 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 00:52:58,578 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 00:52:58,602 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 00:52:58,603 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 00:52:58,730 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 00:52:58,738 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 00:52:59,377 - server - INFO - Tool 执行成功：open_project
+2026-09-28 00:52:59,383 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia.inc', 'format': 'hspice'}
+2026-09-28 00:52:59,478 - server - INFO - Tool 执行成功：load_model
+2026-09-28 00:52:59,482 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 00:52:59,489 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 00:52:59,497 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0}
+2026-09-28 00:52:59,506 - server - ERROR - Tool 执行失败，错误码：8，错误信息：addModelSources returned empty
+2026-09-28 00:52:59,511 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 00:52:59,517 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 35932) 已终止
+
+--- [1] exist_project ok=True code=None wire=1
+    工程存在：是
+--- [2] open_project ok=True code=None wire=1
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model ok=True code=None wire=1
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia.inc
+    格式：hspice
+--- [4] list_available_models ok=True code=None wire=1
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia.inc
+--- [5] add_model_source ok=False code=8 wire=1
+    错误：Tool 执行失败，错误码：8，错误信息：addModelSources returned empty
+
+===== SMOKE FAIL: add_model_source 失败 =====
+
+# 备注1：server 日志中 "MeQLab 已启动 (PID: 35932, port: 2009, --feature prim|rf_main|ppei)"
+#   为 pmms/代理侧输出；实际 gRPC 经 wrapper 转发至预热实例 127.0.0.1:2008，链路行为与 run1 一致。
+# 备注2：本次 ledger 为 tools/pmms-rehearsal/p2_ledger.jsonl（5 行）；run1 账本已归档 p2_ledger.run1-failed.jsonl。

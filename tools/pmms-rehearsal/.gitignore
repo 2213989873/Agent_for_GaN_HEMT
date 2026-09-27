@@ -1,0 +1,5 @@
+# MeQLab 拉起时在 cwd 落下的运行残留
+all-*.dat
+package-attrs.dat
+localeVariants
+lastModified/
