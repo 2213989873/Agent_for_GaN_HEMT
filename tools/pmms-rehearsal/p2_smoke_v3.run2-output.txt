@@ -1,0 +1,43 @@
+# P2 真链路冒烟 v3 · 复跑存档（2026-09-28 16:20 北京时间）
+# 目的：验证"add_model_source 卡点解除"（.lib 包装 + 显式 lib_name/model_name）的可复现性
+# 结果：SMOKE PASS，9/9 全过，计数 9=9
+# 命令：wsl -d Ubuntu -- bash -lc "… && bash run_smoke3.sh"
+
+LAUNCH_PID=1349552
+PORT_UP after ~150s
+2026-09-28 16:19:54,577 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 16:19:54,681 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 18016, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 16:19:55,202 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 16:19:55,217 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 16:19:55,218 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 16:19:55,437 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 16:19:59,632 - server - INFO - Tool 执行成功：open_project
+2026-09-28 16:19:59,638 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'}
+2026-09-28 16:19:59,747 - server - INFO - Tool 执行成功：load_model
+2026-09-28 16:19:59,764 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'}
+2026-09-28 16:20:00,597 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 16:20:00,602 - server - INFO - 调用 Tool: list_params, 参数：{'model_source_name': 'jiamod_tt_N'}
+2026-09-28 16:20:00,634 - server - INFO - 调用 Tool: set_param, 参数：{'model_source_name': 'jiamod_tt_N', 'param_name': 'rdsmod', 'param_value': '1.23', 'param_min': 0.0, 'param_max': 10.0, 'param_step': 0.01}
+2026-09-28 16:20:00,650 - server - INFO - Tool 执行成功：set_param
+2026-09-28 16:20:00,658 - server - INFO - Tool 执行成功：get_param
+
+--- [1] exist_project ok=True   工程存在：是
+--- [2] open_project ok=True    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model ok=True      jia_with_lib.inc / hspice
+--- [4] list_available_models ok=True   ID: 0
+--- [5] add_model_source ok=True
+    模型源添加成功（共 1 个）:
+      - 名称：jiamod_tt_N，模拟器：Nano
+--- [6] list_params ok=True
+    参数列表:
+      - rdsmod: 1
+    >>> 发现参数: ['rdsmod']
+--- [7] get_param ok=True       rdsmod = 1
+--- [8] set_param ok=True       参数设置成功（rdsmod := 1.23, min0/max10/step0.01 显式全传）
+--- [9] get_param ok=True       rdsmod = 1.23  （回读确认）
+
+===== SMOKE PASS: ledger.count=9 calls_made=9 =====
+
+# 关键观察：list_params 只返回"模型卡上显式声明的参数"（本卡只有 rdsmod=1），
+# ASM-HEMT 其余约 120 个默认参数不列出。这与 v2 账本中 set_param(voff) 报
+# code 2 PARAM_INVALID 互为印证——对未声明参数直接写入的路径待探（见任务卡17 §7）。
