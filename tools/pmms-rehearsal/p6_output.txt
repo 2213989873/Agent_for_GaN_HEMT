@@ -1,0 +1,116 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 16:56:17,528 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 16:56:17,528 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 16:56:17,528 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 16:56:17,535 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 14924, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 16:56:18,051 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 16:56:18,051 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 16:56:18,067 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 16:56:18,067 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 16:56:18,068 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 16:56:18,068 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 16:56:18,068 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 16:56:18,088 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:18,088 - server - INFO - 列出所有 Tools
+2026-09-28 16:56:18,089 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 16:56:18,165 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 16:56:18,167 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 16:56:18,167 - server - INFO - 列出所有 Tools
+2026-09-28 16:56:18,171 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:18,173 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 16:56:22,075 - server - INFO - Tool 执行成功：open_project
+2026-09-28 16:56:22,078 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,080 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/data/mosfet/nmos/iv/25/w=9.0,t=25.0,l=9.0.pms', 'data_source_name': 'iv_demo'}
+2026-09-28 16:56:22,591 - server - INFO - Tool 执行成功：load_data
+2026-09-28 16:56:22,595 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,597 - server - INFO - 调用 Tool: list_data_sources, 参数：{}
+2026-09-28 16:56:22,604 - server - INFO - Tool 执行成功：list_data_sources
+2026-09-28 16:56:22,609 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,611 - server - INFO - 调用 Tool: get_data_detail, 参数：{'data_source_name': 'iv_demo'}
+2026-09-28 16:56:22,617 - server - INFO - Tool 执行成功：get_data_detail
+2026-09-28 16:56:22,623 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,624 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'iv_demo'}
+2026-09-28 16:56:22,796 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-28 16:56:22,799 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,800 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-28 16:56:22,810 - server - INFO - Tool 执行成功：list_filters
+2026-09-28 16:56:22,813 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,814 - server - INFO - 调用 Tool: extract_spec, 参数：{'data_source_name': 'iv_demo'}
+2026-09-28 16:56:22,864 - server - INFO - Tool 执行成功：extract_spec
+2026-09-28 16:56:22,867 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,869 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'}
+2026-09-28 16:56:22,910 - server - INFO - Tool 执行成功：load_data
+2026-09-28 16:56:22,914 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,915 - server - INFO - 调用 Tool: get_data_detail, 参数：{'data_source_name': 'jia_iv'}
+2026-09-28 16:56:22,919 - server - INFO - Tool 执行成功：get_data_detail
+2026-09-28 16:56:22,922 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:22,923 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'jia_iv'}
+2026-09-28 16:56:23,010 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-28 16:56:23,013 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:56:23,013 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-28 16:56:23,018 - server - INFO - Tool 执行成功：list_filters
+2026-09-28 16:56:23,021 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 16:56:23,021 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 16:56:23,026 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 14924) 已终止
+2026-09-28 16:56:23,026 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+
+##### A. 官方 demo 数据基线 #####
+--- [3] load_data {'data_type': 0, 'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/data/mosfet/nmos/iv/25/w=9.0,t=25.0,l=9.0.pms', 'data_source_name': 'iv_demo'} -> ok=True code=None
+    数据加载成功
+    名称：iv_demo
+    ID: 0
+--- [4] list_data_sources {} -> ok=True code=None
+    数据源列表:
+      - iv_demo (ID: 0)
+    
+--- [5] get_data_detail {'data_source_name': 'iv_demo'} -> ok=True code=None
+    数据详情:
+    名称：iv_demo
+    类型：Mosfet
+    页数：4
+--- [6] build_filter_by_data {'data_source_name': 'iv_demo'} -> ok=True code=None
+    Filter 构建成功
+--- [7] list_filters {} -> ok=True code=None
+    Filter 列表 (共 6 个):
+      - iv_demo(Sweep) (Ordinary Page)
+      - iv_demo(Spec) (Spec vs Instance)
+      - iv_demo(VbSpec) (Spec vs Instance)
+      - iv_demo(ErrMonitor) (Spec Table)
+      - iv_demo(DeltaT) (Spec Table)
+      - iv_demo(ErrMonitor) (Spec Table)
+    
+--- [8] extract_spec {'data_source_name': 'iv_demo'} -> ok=True code=None
+    Spec 抽取成功
+
+##### B. 自制 jia 转移曲线 .pms（格式复刻判决）#####
+--- [9] load_data {'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'} -> ok=True code=None
+    数据加载成功
+    名称：jia_iv
+    ID: 1
+--- [10] get_data_detail {'data_source_name': 'jia_iv'} -> ok=True code=None
+    数据详情:
+    名称：jia_iv
+    类型：Mosfet
+    页数：1
+--- [11] build_filter_by_data {'data_source_name': 'jia_iv'} -> ok=True code=None
+    Filter 构建成功
+--- [12] list_filters {} -> ok=True code=None
+    Filter 列表 (共 7 个):
+      - iv_demo(Sweep) (Ordinary Page)
+      - iv_demo(Spec) (Spec vs Instance)
+      - iv_demo(VbSpec) (Spec vs Instance)
+      - iv_demo(ErrMonitor) (Spec Table)
+      - iv_demo(DeltaT) (Spec Table)
+      - iv_demo(ErrMonitor) (Spec Table)
+      - jia_iv(Sweep) (Ordinary Page)
+    
+
+===== P6 DONE: ledger.count=12 calls=12 | 自制.pms=PASS =====
