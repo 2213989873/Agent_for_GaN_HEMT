@@ -1,0 +1,156 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 17:44:35,233 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 17:44:35,234 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 17:44:35,234 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 17:44:35,244 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 15312, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 17:44:35,766 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 17:44:35,766 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 17:44:35,777 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 17:44:35,777 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 17:44:35,778 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 17:44:35,778 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 17:44:35,778 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 17:44:35,794 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:35,794 - server - INFO - 列出所有 Tools
+2026-09-28 17:44:35,795 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:44:35,849 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 17:44:35,851 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 17:44:35,851 - server - INFO - 列出所有 Tools
+2026-09-28 17:44:35,854 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:35,854 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:44:39,339 - server - INFO - Tool 执行成功：open_project
+2026-09-28 17:44:39,343 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:39,345 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'}
+2026-09-28 17:44:39,415 - server - INFO - Tool 执行成功：load_model
+2026-09-28 17:44:39,417 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:39,419 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 17:44:39,424 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 17:44:39,427 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:39,429 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'}
+2026-09-28 17:44:40,254 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 17:44:40,256 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,258 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'}
+2026-09-28 17:44:40,362 - server - INFO - Tool 执行成功：load_data
+2026-09-28 17:44:40,365 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,366 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'jia_iv'}
+2026-09-28 17:44:40,423 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-28 17:44:40,425 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,426 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-28 17:44:40,430 - server - INFO - Tool 执行成功：clear_views
+2026-09-28 17:44:40,434 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,440 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]}
+2026-09-28 17:44:40,540 - server - INFO - Tool 执行成功：view
+2026-09-28 17:44:40,543 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,544 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:44:40,549 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-28 17:44:40,551 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,552 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'bin_model_demo_point_model'}
+2026-09-28 17:44:40,557 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 17:44:40,560 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:40,561 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'bin_model_demo_point_model'}
+2026-09-28 17:44:41,443 - server - INFO - Tool 执行成功：open_project
+2026-09-28 17:44:41,446 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:41,447 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-28 17:44:41,475 - server - INFO - Tool 执行成功：list_filters
+2026-09-28 17:44:41,478 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:44:41,478 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:44:41,481 - server - ERROR - Tool 执行失败，错误码：2，错误信息：no view group loaded, call view first
+2026-09-28 17:44:41,484 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 17:44:41,484 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 17:44:41,491 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 15312) 已终止
+2026-09-28 17:44:41,491 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+========== A 段：jia + asmhemt nan 现场取证 ==========
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    格式：hspice
+--- [4] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    
+--- [5] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：jiamod_tt_N，模拟器：Nano
+    
+>>> 模型源: jiamod_tt_N
+--- [6] load_data {'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'} -> ok=True code=None
+    数据加载成功
+    名称：jia_iv
+    ID: 1
+--- [7] build_filter_by_data {'data_source_name': 'jia_iv'} -> ok=True code=None
+    Filter 构建成功
+--- [8] clear_views {} -> ok=True code=None
+    视图已清空
+--- [9] view {'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [10] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+
+########## 日志增量 @A段 view+error 之后 ##########
+--- info.log: 无新增 (20882B)
+--- warning.log: 无新增 (141B)
+--- severe.log: 无新增 (4736B)
+--- messages.log: 无新增 (22806B)
+
+========== B 段：官方 point_model 工程对照 ==========
+--- [11] exist_project {'project_name': 'bin_model_demo_point_model'} -> ok=True code=None
+    工程存在：是
+--- [12] open_project {'project_name': 'bin_model_demo_point_model'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/bin_model_demo_point_model
+--- [13] list_filters {} -> ok=True code=None
+    Filter 列表 (共 10 个):
+      - IV_data(Sweep) (Ordinary Page)
+      - IV_data(Spec) (Spec vs Instance)
+      - IV_data(VbSpec) (Spec vs Instance)
+      - IV_data(ErrMonitor) (Spec Table)
+      - Cgg_data(Sweep) (Ordinary Page)
+      - Cgc_data(Sweep) (Ordinary Page)
+      - Spec_stress_effect(Spec) (Spec vs Instance)
+      - Spec_stress_effect(ErrMonitor) (Spec Table)
+      - WAT_data(Spec) (Spec vs Instance)
+      - WAT_data(ErrMonitor) (Spec Table)
+    
+--- [14] get_view_group_error {} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：no view group loaded, call view first
+
+########## 日志增量 @B段 打开官方工程+error 之后 ##########
+--- info.log (+752B) ---
+[17:44:40][com.platformda.system.EditingProjectService][INFO] unsetEditingProject: /tmp/MeqlabProjects/pmms_rehearsal
+[17:44:40][com.platformda.system.EditingProjectService][INFO] setEditingProject: /tmp/MeqlabProjects/bin_model_demo_point_model
+[17:44:40][com.platformda.extraction.simulate.SimEntryManager][FINE] Done simulation (total time: 0.234 seconds)
+[17:44:41][com.platformda.extraction.workspace.Workspace][FINE] Done loading model suites (total time: 0.152 seconds)
+[17:44:41][com.platformda.extraction.ExtractionDAO][FINE] Done loading db (total time: 0.129 seconds)
+[17:44:41][com.platformda.extraction.workspace.Workspace][FINE] Done loading workspace.xml (total time: 0.484 seconds)
+
+--- warning.log: 无新增 (141B)
+--- severe.log: 无新增 (4736B)
+--- messages.log (+1916B) ---
+[17:44:35][com.platformda.system.EditingProjectService][INFO] setEditingProject: /tmp/MeqlabProjects/pmms_rehearsal
+[17:44:36][com.platformda.extraction.workspace.Workspace][FINE] Done loading workspace.xml (total time: 0.269 seconds)
+[17:44:36][com.platformda.extraction.workspace.Workspace][WARNING] /tmp/MeqlabProjects/pmms_rehearsal/data/undo.xml does not exist.
+[17:44:39][com.platformda.model.ModelUtil][FINE] Done loading model from file (total time: 0 seconds)
+[17:44:39][com.platformda.model.ModelUtil][FINE] Done loading hierarchy (total time: 0 seconds)
+[17:44:39][com.platformda.model.ModelUtil][FINE] Done loading prop (total time: 0 seconds)
+[17:44:39][com.platformda.model.ModelUtil][FINE] Done loading model suite from file (total time: 0.006 seconds)
+[17:44:40][com.platformda.extraction.LC][INFO] Check out license MS_MEQLAB_SPICE failed.
+[17:44:40][com.platformda.datacore.DataLoaderManager][INFO] Start loading /home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms
+[17:44:40][com.platformda.extraction.workspace.Workspace][FINE] Done saving data (total time: 0.06 seconds)
+[17:44:40][com.platformda.spec.sep.EvaluatorVisitor][SEVERE] Failed to call function findpage. Error: FindPage: failed to find needed page
+[17:44:40][null][SEVERE] Last record repeated 32 times in total.
+[17:44:40][com.platformda.extraction.workspace.Workspace][FINE] Done saving data (total time: 0 seconds)
+[17:44:40][com.platformda.system.EditingProjectService][INFO] unsetEditingProject: /tmp/MeqlabProjects/pmms_rehearsal
+[17:44:40][com.platformda.system.EditingProjectService][INFO] setEditingProject: /tmp/MeqlabProjects/bin_model_demo_point_model
+[17:44:40][com.platformda.extraction.simulate.SimEntryManager][FINE] Done simulation (total time: 0.234 seconds)
+
+
+===== P8 DONE: ledger.count=14 calls=14 | A段(nan复现)=EMPTY B段(官方对照)=EMPTY =====

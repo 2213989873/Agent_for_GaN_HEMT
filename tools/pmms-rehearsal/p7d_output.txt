@@ -1,0 +1,132 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 17:18:59,641 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 17:18:59,641 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 17:18:59,641 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 17:18:59,646 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 2836, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 17:19:00,152 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 17:19:00,152 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 17:19:00,174 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 17:19:00,174 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 17:19:00,174 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 17:19:00,175 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 17:19:00,175 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 17:19:00,192 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:00,192 - server - INFO - 列出所有 Tools
+2026-09-28 17:19:00,193 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:19:00,251 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 17:19:00,253 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 17:19:00,253 - server - INFO - 列出所有 Tools
+2026-09-28 17:19:00,256 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:00,257 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:19:04,012 - server - INFO - Tool 执行成功：open_project
+2026-09-28 17:19:04,016 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:04,017 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/nmos_wrapped.inc', 'format': 'hspice'}
+2026-09-28 17:19:04,107 - server - INFO - Tool 执行成功：load_model
+2026-09-28 17:19:04,110 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:04,111 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 17:19:04,117 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 17:19:04,121 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:04,123 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'nmos'}
+2026-09-28 17:19:04,923 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 17:19:04,928 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:04,929 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/data/mosfet/nmos/iv/25/w=9.0,t=25.0,l=9.0.pms', 'data_source_name': 'iv_demo'}
+2026-09-28 17:19:05,157 - server - INFO - Tool 执行成功：load_data
+2026-09-28 17:19:05,162 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,163 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'iv_demo'}
+2026-09-28 17:19:05,321 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-28 17:19:05,325 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,325 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-28 17:19:05,334 - server - INFO - Tool 执行成功：list_filters
+2026-09-28 17:19:05,337 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,338 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-28 17:19:05,343 - server - INFO - Tool 执行成功：clear_views
+2026-09-28 17:19:05,346 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,349 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]}
+2026-09-28 17:19:05,438 - server - INFO - Tool 执行成功：view
+2026-09-28 17:19:05,443 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,444 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:19:05,451 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-28 17:19:05,457 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,458 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-28 17:19:05,463 - server - INFO - Tool 执行成功：clear_views
+2026-09-28 17:19:05,467 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,471 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'id_vg', 'selection_string': 'xr(0,1)'}]}
+2026-09-28 17:19:05,492 - server - INFO - Tool 执行成功：view
+2026-09-28 17:19:05,498 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,499 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:19:05,504 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-28 17:19:05,508 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,509 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-28 17:19:05,516 - server - INFO - Tool 执行成功：clear_views
+2026-09-28 17:19:05,522 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,528 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'Id_Vg', 'selection_string': 'xr(0,1)'}]}
+2026-09-28 17:19:05,550 - server - INFO - Tool 执行成功：view
+2026-09-28 17:19:05,555 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:19:05,556 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:19:05,563 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-28 17:19:05,567 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 17:19:05,568 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 17:19:05,577 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 2836) 已终止
+2026-09-28 17:19:05,577 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/nmos_wrapped.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/nmos_wrapped.inc
+    格式：hspice
+--- [4] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/nmos_wrapped.inc
+    
+--- [5] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'nmos'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：nmos_tt_N，模拟器：Nano
+    
+>>> 官方模型源: nmos_tt_N
+--- [6] load_data {'data_type': 0, 'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/data/mosfet/nmos/iv/25/w=9.0,t=25.0,l=9.0.pms', 'data_source_name': 'iv_demo'} -> ok=True code=None
+    数据加载成功
+    名称：iv_demo
+    ID: 1
+--- [7] build_filter_by_data {'data_source_name': 'iv_demo'} -> ok=True code=None
+    Filter 构建成功
+--- [8] list_filters {} -> ok=True code=None
+    Filter 列表 (共 6 个):
+      - iv_demo(Sweep) (Ordinary Page)
+      - iv_demo(Spec) (Spec vs Instance)
+      - iv_demo(VbSpec) (Spec vs Instance)
+      - iv_demo(ErrMonitor) (Spec Table)
+      - iv_demo(DeltaT) (Spec Table)
+      - iv_demo(ErrMonitor) (Spec Table)
+    
+--- [9] clear_views {} -> ok=True code=None
+    视图已清空
+--- [10] view {'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [11] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+>>> 页名 'id_vg_vb' 空，换下一个
+--- [12] clear_views {} -> ok=True code=None
+    视图已清空
+--- [13] view {'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'id_vg', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [14] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+>>> 页名 'id_vg' 空，换下一个
+--- [15] clear_views {} -> ok=True code=None
+    视图已清空
+--- [16] view {'view_fields': [{'filter_string': 'name,iv_demo', 'source_string': 'iv_demo, nmos_tt_N', 'page_string': 'Id_Vg', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [17] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+>>> 页名 'Id_Vg' 空，换下一个
+
+===== P7d DONE: ledger.count=17 calls=17 | 官方对照组判决=EMPTY =====

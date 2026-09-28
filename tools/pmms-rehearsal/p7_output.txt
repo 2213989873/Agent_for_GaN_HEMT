@@ -1,0 +1,187 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 17:06:27,788 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 17:06:27,788 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 17:06:27,789 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 17:06:27,794 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 3568, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 17:06:28,302 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 17:06:28,302 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 17:06:28,325 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 17:06:28,325 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 17:06:28,327 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 17:06:28,327 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 17:06:28,327 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 17:06:28,347 - mcp.server.lowlevel.server - INFO - Processing request of type ReadResourceRequest
+2026-09-28 17:06:28,348 - server - INFO - 读取 Resource：pmms://view_fields_guide
+2026-09-28 17:06:28,351 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:28,351 - server - INFO - 列出所有 Tools
+2026-09-28 17:06:28,352 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:06:28,393 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 17:06:28,397 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 17:06:28,397 - server - INFO - 列出所有 Tools
+2026-09-28 17:06:28,401 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:28,402 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:06:32,206 - server - INFO - Tool 执行成功：open_project
+2026-09-28 17:06:32,209 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:32,210 - server - INFO - 调用 Tool: list_model_sources, 参数：{}
+2026-09-28 17:06:32,218 - server - INFO - Tool 执行成功：list_model_sources
+2026-09-28 17:06:32,222 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:32,224 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'}
+2026-09-28 17:06:32,327 - server - INFO - Tool 执行成功：load_model
+2026-09-28 17:06:32,330 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:32,330 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 17:06:32,337 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 17:06:32,340 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:32,343 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'}
+2026-09-28 17:06:33,183 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 17:06:33,187 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,189 - server - INFO - 调用 Tool: list_data_sources, 参数：{}
+2026-09-28 17:06:33,196 - server - INFO - Tool 执行成功：list_data_sources
+2026-09-28 17:06:33,200 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,203 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'}
+2026-09-28 17:06:33,321 - server - INFO - Tool 执行成功：load_data
+2026-09-28 17:06:33,326 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,327 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'jia_iv'}
+2026-09-28 17:06:33,399 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-28 17:06:33,403 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,404 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-28 17:06:33,412 - server - INFO - Tool 执行成功：list_filters
+2026-09-28 17:06:33,415 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,416 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-28 17:06:33,419 - server - INFO - Tool 执行成功：clear_views
+2026-09-28 17:06:33,422 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,427 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N', 'page_string': 'Id_Vg', 'selection_string': 'xr(0,1)', 'prop_string': 'logy'}]}
+2026-09-28 17:06:33,588 - server - INFO - Tool 执行成功：view
+2026-09-28 17:06:33,591 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,592 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-28 17:06:33,602 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-28 17:06:33,606 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:06:33,608 - server - INFO - 调用 Tool: dump_view_group, 参数：{'path': '/tmp/p7_view_group.xlsx'}
+2026-09-28 17:06:34,541 - server - INFO - Tool 执行成功：dump_view_group
+2026-09-28 17:06:34,545 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 17:06:34,545 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 17:06:34,551 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 3568) 已终止
+2026-09-28 17:06:34,551 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+=== pmms://view_fields_guide（前 2800 字符）===
+# view 工具 view_fields 填写指南
+
+> 本文档面向 MCP Agent：说明 `view` 工具 `view_fields` 参数如何填写，才能得到目标图型。
+> `view_fields` 的每个字段对应 MeQLab 模板 **view 语句**（`TEMPLATE_WRITING_GUIDE.md` §8.2，Resource `pmms://template_writing_guide`）中的一个片段，语法同源：
+> - 每个 `view_fields[i]` 元素 = 一条 view 语句 = 一个（或一组）视图；
+> - 一次 `view` 调用传多个元素 = 一次构建整个视图组。
+
+## 1. 字段 ↔ view 语句片段对照
+
+| view_fields 字段 | view 语句片段 | 语法出处 | 作用 | 是否常用 |
+|---|---|---|---|---|
+| `filter_string` | `filter(...)` | §8.2.1 | 定位 workspace 中**已存在**的 filter | 必填 |
+| `source_string` | `source(...)` / `sourcepair(...)` | §8.2.3 | 选择数据源与模型源（配对对比） | 必填 |
+| `device_string` | `device(...)` | §8.2.4 | 在 filter 器件集合内过滤/排序 | 多尺寸时 |
+| `page_string` | `page(...)` | §8.2.5 | 选择曲线页（决定"画什么曲线"） | sweep 图必填 |
+| `spec_string` | `spec(...)` | §8.2.6 | 选择 spec | spec trend 图 |
+| `selection_string` | `selection(...)` | §8.2.9 | 曲线/数据选区 | 优化/误差统计时必填 |
+| `prop_string` | `prop(...)` | §6.6 | 视图属性（坐标、算法等） | 可选 |
+
+## 2. 各字段语法速查
+
+### 2.1 filter_string —— 定位 filter
+
+以 `关键字,值` 成对出现，多组之间用逗号分隔；name 必填，type/group 等按需可选。按顺序匹配 workspace 全部 Filter，取第一个满足全部关键字的 filter：
+
+| 关键字 | 匹配规则 |
+|---|---|
+| `type` | 非必填；类型全名或短名，仅支持：`op`/`mp`/`mdvi`/`svi`/`histogram`/`st`/`scatter`/`mismatch`（不存在 `iv`/`cv`） |
+| `name` | 名称**包含**子串（忽略大小写） |
+| `group` | 分组名包含子串 |
+| `nameprefix` / `namestart` | 名称前缀匹配 |
+| `groupprefix` / `groupstart` | 分组名前缀匹配 |
+| `nameexclude` / `groupexclude` | 剔除名称/分组包含子串者 |
+| `source` | filter 关联到指定 source（名称或 corner 名） |
+
+示例：`name,idsat`、`type,op,name,idsat`、`type,op,group,gkey1,nameexclude,backup`
+
+注意：
+- **filter 匹配不到时该视图静默跳过（不报错）** → 调用前先用 `list_filters` 确认名称，用 `name,` 写名称的稳定子串最稳妥。
+- 只能定位已有 filter，不能从模板构建新 filter。
+
+### 2.2 source_string —— 数据源 / 模型源
+
+格式：`<data_source_name>,<model_source_name>`（逗号分隔；前者为测量数据、后者为模型仿真，二者配对输出到同一视图对比）。
+名称可先通过 `list_data_sources` / `list_model_sources` 查询。
+示例：`iv, nch_ckt_tt_N`
+
+### 2.3 device_string —— 器件过滤（多尺寸时用）
+
+逗号分隔，在 filter **已有**器件集合内过滤（不是新建）：
+
+- `实例名=值`：`w=10`、`l=max`、`t=tnom`、`w=max(values)`
+- `hasinst(sa)` / `inst(sa)`：保留拥有该实例的器件；`noinst(sb)`：保留没有的
+- `exp(表达式)`：布尔过滤（结果 >0.5 为真），可用实例名、`xxxvalues`、`nan`，如 `exp(l>5)`
+- `order, 键1, 键2.d`：排序，`.d` 降序，如 `order, w, l.d`
+
+值语法（§6.7）：数字（`10`、`1e-3`）、变量名（`tnom`、`vdd`）、`max`/`min`（候选集合极值）、四则表达式（`vtlin+(vgg-vtlin)/2`）。
+
+示例：`w=max`；`w=10, l=10`；`w=max, exp(l>5), order, l.d`
+
+### 2.4 page_string —— 曲线页选择（决定画什么曲线）
+
+在 filter **已有** page 集合内过滤。四种写法，可组合在同一个逗号列表里：
+
+1. **`y_x_p` 下划线式**：`id_vg_vb` → y=id、x=vg、p=vb（p 为曲线族参数）；y 可多个用分号：`is;Id_vg_vb`
+2. **`@条件=值;条件2=值2`**：限定 **page 条件（conditions）** 的取值，如 `id_vg_vb@vd=vdd;vs=0`
+   > ⚠ `@` 只用于 page 条件，**不能用来选曲线族中的某条 p 曲线**。例如「取 p 轴为 0 的那条线」不能写成 `id_vgs@p=0`（会匹配不到任何 page），应在 `selection_string` 用 `sep(0)`（见 §2.6）。
+3. **`key=value` 匹配对**：
+
+   | key | 含义 |
+   |---|---|
+   | `y=ib;ic` | y 轴集合包含所有给定名（分号分隔多值） |
+   | `yall` | y 集合完全一致 |
+   | `x` / `p` | x
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] list_model_sources {} -> ok=True code=None
+    模型源列表（共 0 个）:
+    
+--- [4] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    格式：hspice
+--- [5] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    
+--- [6] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：jiamod_tt_N，模拟器：Nano
+    
+>>> 新建模型源: jiamod_tt_N
+--- [7] list_data_sources {} -> ok=True code=None
+    数据源列表:
+    
+--- [8] load_data {'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'} -> ok=True code=None
+    数据加载成功
+    名称：jia_iv
+    ID: 1
+--- [9] build_filter_by_data {'data_source_name': 'jia_iv'} -> ok=True code=None
+    Filter 构建成功
+--- [10] list_filters {} -> ok=True code=None
+    Filter 列表 (共 1 个):
+      - jia_iv(Sweep) (Ordinary Page)
+    
+--- [11] clear_views {} -> ok=True code=None
+    视图已清空
+--- [12] view {'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N', 'page_string': 'Id_Vg', 'selection_string': 'xr(0,1)', 'prop_string': 'logy'}]} -> ok=True code=None
+    视图选择成功
+>>> view 成功组合: filter='name,jia_iv' page='Id_Vg'
+--- [13] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+--- [14] dump_view_group {'path': '/tmp/p7_view_group.xlsx'} -> ok=True code=None
+    视图组导出成功
+
+===== P7 DONE: ledger.count=14 calls=14 | get_view_group_error=PASS =====

@@ -1,0 +1,53 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 17:15:16,501 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 17:15:16,501 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 17:15:16,501 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 17:15:16,505 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 29008, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 17:15:17,040 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 17:15:17,040 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 17:15:17,051 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 17:15:17,051 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 17:15:17,052 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 17:15:17,052 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 17:15:17,052 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 17:15:17,067 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:15:17,067 - server - INFO - 列出所有 Tools
+2026-09-28 17:15:17,068 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:15:17,131 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 17:15:17,133 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 17:15:17,133 - server - INFO - 列出所有 Tools
+2026-09-28 17:15:17,137 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:15:17,138 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 17:15:20,877 - server - INFO - Tool 执行成功：open_project
+2026-09-28 17:15:20,880 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:15:20,882 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/model/demo.lib', 'format': 'hspice'}
+2026-09-28 17:15:20,974 - server - INFO - Tool 执行成功：load_model
+2026-09-28 17:15:20,977 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:15:20,978 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 17:15:20,987 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 17:15:20,991 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 17:15:20,993 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'nch'}
+2026-09-28 17:15:21,001 - server - ERROR - Tool 执行失败，错误码：8，错误信息：addModelSources returned empty
+2026-09-28 17:15:21,004 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 17:15:21,004 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 17:15:21,009 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 29008) 已终止
+2026-09-28 17:15:21,009 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model {'path': '/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/model/demo.lib', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/model/demo.lib
+    格式：hspice
+--- [4] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/MS-MeQLab/MS-MeQLab/etc/demo/model/demo.lib
+    
+--- [5] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'nch'} -> ok=False code=8
+    错误：Tool 执行失败，错误码：8，错误信息：addModelSources returned empty
+FAIL: add_model_source(nch@tt)
