@@ -1,0 +1,195 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-28 16:36:41,788 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-28 16:36:41,788 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-28 16:36:41,788 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-28 16:36:41,795 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 31912, port: 2009, --feature prim|rf_main|ppei)
+2026-09-28 16:36:42,310 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-28 16:36:42,310 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-28 16:36:42,330 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-28 16:36:42,330 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-28 16:36:42,331 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-28 16:36:42,331 - server - INFO - ✓ MCP Server 启动成功
+2026-09-28 16:36:42,331 - server - INFO - 等待 MCP Client 连接...
+2026-09-28 16:36:42,350 - mcp.server.lowlevel.server - INFO - Processing request of type ReadResourceRequest
+2026-09-28 16:36:42,350 - server - INFO - 读取 Resource：pmms://param_fields_guide
+2026-09-28 16:36:42,354 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:42,354 - server - INFO - 列出所有 Tools
+2026-09-28 16:36:42,355 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 16:36:42,561 - server - INFO - Tool 执行成功：exist_project
+2026-09-28 16:36:42,565 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-28 16:36:42,565 - server - INFO - 列出所有 Tools
+2026-09-28 16:36:42,568 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:42,569 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-28 16:36:46,464 - server - INFO - Tool 执行成功：open_project
+2026-09-28 16:36:46,466 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:46,468 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'}
+2026-09-28 16:36:46,558 - server - INFO - Tool 执行成功：load_model
+2026-09-28 16:36:46,561 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:46,562 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 16:36:46,570 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 16:36:46,573 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:46,576 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'}
+2026-09-28 16:36:47,380 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 16:36:47,383 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,385 - server - INFO - 调用 Tool: get_param, 参数：{'model_source_name': 'jiamod_tt_N', 'param_name': 'voff'}
+2026-09-28 16:36:47,390 - server - ERROR - Tool 执行失败，错误码：2，错误信息：param not found: voff
+2026-09-28 16:36:47,392 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,397 - server - INFO - 调用 Tool: set_param, 参数：{'model_source_name': 'jiamod_tt_N', 'param_name': 'voff', 'param_value': '-2.0', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01, 'node_name': 'jiamod'}
+2026-09-28 16:36:47,403 - server - ERROR - Tool 执行失败，错误码：2，错误信息：param not found: voff
+2026-09-28 16:36:47,406 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,411 - server - INFO - 调用 Tool: set_param, 参数：{'model_source_name': 'jiamod_tt_N', 'param_name': 'voff', 'param_value': '-2.0', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01}
+2026-09-28 16:36:47,414 - server - ERROR - Tool 执行失败，错误码：2，错误信息：param not found: voff
+2026-09-28 16:36:47,418 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,421 - server - INFO - 调用 Tool: get_param, 参数：{'model_source_name': 'jiamod_tt_N', 'param_name': 'voff'}
+2026-09-28 16:36:47,425 - server - ERROR - Tool 执行失败，错误码：2，错误信息：param not found: voff
+2026-09-28 16:36:47,428 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,430 - server - INFO - 调用 Tool: list_params, 参数：{'model_source_name': 'jiamod_tt_N'}
+2026-09-28 16:36:47,437 - server - INFO - Tool 执行成功：list_params
+2026-09-28 16:36:47,441 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,442 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_declared.inc', 'format': 'hspice'}
+2026-09-28 16:36:47,451 - server - INFO - Tool 执行成功：load_model
+2026-09-28 16:36:47,454 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,455 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-28 16:36:47,458 - server - INFO - Tool 执行成功：list_available_models
+2026-09-28 16:36:47,461 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:47,464 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 1, 'lib_name': 'tt', 'model_name': 'jiafull'}
+2026-09-28 16:36:48,151 - server - INFO - Tool 执行成功：add_model_source
+2026-09-28 16:36:48,155 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:48,157 - server - INFO - 调用 Tool: list_params, 参数：{'model_source_name': 'jiafull_tt_N'}
+2026-09-28 16:36:48,161 - server - INFO - Tool 执行成功：list_params
+2026-09-28 16:36:48,164 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:48,168 - server - INFO - 调用 Tool: set_param, 参数：{'model_source_name': 'jiafull_tt_N', 'param_name': 'voff', 'param_value': '-2.2', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01}
+2026-09-28 16:36:48,180 - server - INFO - Tool 执行成功：set_param
+2026-09-28 16:36:48,183 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-28 16:36:48,185 - server - INFO - 调用 Tool: get_param, 参数：{'model_source_name': 'jiafull_tt_N', 'param_name': 'voff'}
+2026-09-28 16:36:48,189 - server - INFO - Tool 执行成功：get_param
+2026-09-28 16:36:48,192 - grpc_client - INFO - 心跳线程已停止
+2026-09-28 16:36:48,192 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-28 16:36:48,198 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 31912) 已终止
+2026-09-28 16:36:48,198 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+=== pmms://param_fields_guide 原文（前 2500 字符）===
+# optimize / start_optimize 参数填写指南（model_source_name + param_string）
+
+> 本文档面向 MCP Agent：说明 `optimize` / `start_optimize` 的 `model_source_name` 与 `param_string` 两个参数如何填写，才能正确选中参与优化的模型参数。
+>
+> 接口把模板里的 `param global(...)` / `param param(...)` 拆成两部分：
+> - `model_source_name`：**必填**，模型源名（模板中 param 行的首段模型变量名在接口里对应模型源名）；
+> - `param_string`：**必填**，只填参数名列表（不含模型源名），等价于模板 param 行去掉 `param <key>(`、`)` 与首段模型名之后剩下的参数列表。
+>
+> 服务端会自行组装为内部串「模型源名,参数名,...」（如 `nmos_N,vth0,u0`），Agent 无需拼首段。
+>
+> 相关工具：`list_model_sources`（取模型源名）、`list_params`（取可用参数名）、
+> `view`（构图，使用优化时必须提供 `selection_string`）、
+> `start_optimize` + `get_job_status`（异步优化；同步入口为 `optimize`）。
+
+> **⚠ Agent 硬性规则（最重要）**：
+> 1. **必须传 `model_source_name`**——它是独立必填字段，不再是 `param_string` 的首段。
+>    用户通常只报参数名（如"优化 vth0、u0、ua、ub"），模型源名须自行取得：
+>    来源优先级：① 用户/上下文已给的模型源名 → ② 本次 `view` 的 `source_string` 第二段 →
+>    ③ `list_model_sources` 查询。
+> 2. **`param_string` 只填参数名，禁止再带模型源名**，也禁止传空。
+>    正确：`model_source_name=nmos_N`、`param_string=vth0,u0`；
+>    错误：`param_string=nmos_N,vth0,u0`（模型源名重复，应放到 `model_source_name`）。
+> 3. PMMS 会校验 `model_source_name` 必须是已加载的模型源名，否则直接报错返回，不再静默跳过。
+>    参数名写错仍会被服务端静默跳过（只表现为"优化没效果"），故参数名务必照抄 `list_params`。
+
+## 1. 两个字段的格式
+
+```
+model_source_name: <模型源名>                              # 例：nmos_N
+param_string:      <参数名1>[,<参数名2>...][,device(<实例=值>...,<器件级参数名>...)]
+```
+
+- `model_source_name` 与 `view` 的 `source_string` 中的 `model_source_name` 一致，可用 `list_model_sources` 查询；
+- `param_string` 用**英文半角逗号** `,` 分隔，段内不要加空格；
+- **不要**在 `param_string` 里写模型源名，也**不要写** `param` / `global` / `param(...)` 等关键字与外层括号；
+- `param_string` 仅普通参数名时，作用于模型 bean/para 参数；`device(...)` 段用于 binning/copy 的器件级参数（见 §5）。
+
+## 2. 与模板 §13.2 param 行的对应关系
+
+| 模板 param 行（§13.2 完整写法） | model_source_name | param_string |
+|---|---|---|
+| `param global(Model, vth0, u0, ua, ub)` | `Model` 对应的模型源名（如 `nmos_N`） | `vth0,u0,ua,ub` |
+| `param param(Model, avth0)` | 同上 | `avth0` |
+| `param param(rfmodel,${cgdext_rf})` | rfmodel 对应模型源名 | `cgdext_rf`（`${token}` 已展开） |
+| `param device(Model1, w=10, l=10) copy(Model, cgs0)` | Model 对应模型源名 | `cgs0` 或 `device(w=10,l=10,cgs0)` |
+
+要点：
+
+- 模板 param 行的首段是**模型变量名**（如 `Model`、`rfmodel`）；在 optimize 接口中该角色由独立的 `model_source_name` 承担（填**模型源名**，如 `nmos_N`）；
+- 服务端在候选参数集合（ModelBean + ModelPara + DeviceCopy）中自动匹配 `param_string` 中的参数名。
+
+## 3. 最小示例
+
+| 场景 | model_source_name | param_string |
+|---|---|---|
+| 只优化阈值电压与迁移率 | `nmos_N` | `vth0,u0` |
+| 一组 IV 常用参数 | `nmos_N` | `vth0,u0,ua,ub,uc` |
+| 用前后缀批量匹配参数 | `nmos_N` | `prefix.nch33_,end.cgsx` |
+--- [1] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [3] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    格式：hspice
+--- [4] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    
+--- [5] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：jiamod_tt_N，模拟器：Nano
+    
+>>> src1 = jiamod_tt_N
+
+##### H1：未声明参数 voff 的读写 #####
+--- [6] get_param {'model_source_name': 'jiamod_tt_N', 'param_name': 'voff'} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：param not found: voff
+--- [7] set_param {'model_source_name': 'jiamod_tt_N', 'param_name': 'voff', 'param_value': '-2.0', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01, 'node_name': 'jiamod'} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：param not found: voff
+--- [8] set_param {'model_source_name': 'jiamod_tt_N', 'param_name': 'voff', 'param_value': '-2.0', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：param not found: voff
+--- [9] get_param {'model_source_name': 'jiamod_tt_N', 'param_name': 'voff'} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：param not found: voff
+--- [10] list_params {'model_source_name': 'jiamod_tt_N'} -> ok=True code=None
+    参数列表:
+      - rdsmod: 1
+    
+
+##### H2：声明卡 jia_declared.inc #####
+--- [11] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_declared.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_declared.inc
+    格式：hspice
+--- [12] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+      - ID: 1, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_declared.inc
+    
+--- [13] add_model_source {'model_suite_id': 1, 'lib_name': 'tt', 'model_name': 'jiafull'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：jiafull_tt_N，模拟器：Nano
+    
+>>> src2 = jiafull_tt_N
+--- [14] list_params {'model_source_name': 'jiafull_tt_N'} -> ok=True code=None
+    参数列表:
+      - rdsmod: 1
+      - voff: -1.0
+      - u0: 0.03
+      - rth0: 20.0
+      - tbar: 1e-8
+      - rontr1: 0.0
+    
+--- [15] set_param {'model_source_name': 'jiafull_tt_N', 'param_name': 'voff', 'param_value': '-2.2', 'param_min': -3.0, 'param_max': 0.0, 'param_step': 0.01} -> ok=True code=None
+    参数设置成功
+--- [16] get_param {'model_source_name': 'jiafull_tt_N', 'param_name': 'voff'} -> ok=True code=None
+    参数名：voff
+    值：-2.2
+
+===== P5 DONE: ledger.count=16 calls=16 | H1(node_name 直写未声明参数)=FAIL =====
