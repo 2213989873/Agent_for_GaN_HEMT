@@ -1,0 +1,185 @@
+PyInstaller\loader\pyimod02_importers.py:419: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+2026-09-30 21:29:09,830 - server - INFO - 使用默认配置（需要 CLI 传入 SSH 信息）
+2026-09-30 21:29:09,830 - server - INFO - 启动 primarius-modeling MCP Server（本地模式）
+2026-09-30 21:29:09,830 - meqlab_manager - INFO - ✓ 选定本地空闲端口：127.0.0.1:2009
+2026-09-30 21:29:09,923 - meqlab_manager - INFO - ✓ MeQLab 已启动 (PID: 38692, port: 2009, --feature prim|rf_main|ppei)
+2026-09-30 21:29:10,448 - meqlab_manager - INFO - ✓ gRPC 端口就绪：127.0.0.1:2009
+2026-09-30 21:29:10,448 - server - INFO - ✓ MeQLab 已启动，gRPC 端口：2009
+2026-09-30 21:29:10,461 - grpc_client - INFO - ✓ 连接到 MeQLab server: 127.0.0.1:2009
+2026-09-30 21:29:10,461 - server - INFO - ✓ 连接到 MeQLab gRPC server：127.0.0.1:2009
+2026-09-30 21:29:10,462 - grpc_client - INFO - ✓ 心跳线程已启动（间隔 10.0s）
+2026-09-30 21:29:10,462 - server - INFO - ✓ MCP Server 启动成功
+2026-09-30 21:29:10,462 - server - INFO - 等待 MCP Client 连接...
+2026-09-30 21:29:10,480 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:10,480 - server - INFO - 列出所有 Tools
+2026-09-30 21:29:10,481 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'bin_model_demo_point_model'}
+2026-09-30 21:29:10,543 - server - INFO - Tool 执行成功：exist_project
+2026-09-30 21:29:10,546 - mcp.server.lowlevel.server - INFO - Processing request of type ListToolsRequest
+2026-09-30 21:29:10,546 - server - INFO - 列出所有 Tools
+2026-09-30 21:29:10,550 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:10,550 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'bin_model_demo_point_model'}
+2026-09-30 21:29:14,440 - server - INFO - Tool 执行成功：open_project
+2026-09-30 21:29:14,443 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,444 - server - INFO - 调用 Tool: list_filters, 参数：{}
+2026-09-30 21:29:14,501 - server - INFO - Tool 执行成功：list_filters
+2026-09-30 21:29:14,504 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,506 - server - INFO - 调用 Tool: list_data_sources, 参数：{}
+2026-09-30 21:29:14,515 - server - INFO - Tool 执行成功：list_data_sources
+2026-09-30 21:29:14,519 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,520 - server - INFO - 调用 Tool: get_data_detail, 参数：{'data_source_name': 'IV_data'}
+2026-09-30 21:29:14,526 - server - INFO - Tool 执行成功：get_data_detail
+2026-09-30 21:29:14,529 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,530 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-30 21:29:14,535 - server - ERROR - Tool 执行失败，错误码：2，错误信息：no view group loaded, call view first
+2026-09-30 21:29:14,540 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,541 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-30 21:29:14,548 - server - INFO - Tool 执行成功：clear_views
+2026-09-30 21:29:14,551 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,556 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,IV_data(Sweep)', 'source_string': 'IV_data, Binning1', 'page_string': 'id_vd', 'selection_string': 'xr(0,1)'}]}
+2026-09-30 21:29:14,899 - server - INFO - Tool 执行成功：view
+2026-09-30 21:29:14,901 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,903 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-30 21:29:14,912 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-30 21:29:14,918 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:14,919 - server - INFO - 调用 Tool: dump_view_group, 参数：{'path': '/tmp/p9_demo_view_group.xlsx'}
+2026-09-30 21:29:16,845 - server - INFO - Tool 执行成功：dump_view_group
+2026-09-30 21:29:16,848 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:16,849 - server - INFO - 调用 Tool: exist_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-30 21:29:16,854 - server - INFO - Tool 执行成功：exist_project
+2026-09-30 21:29:16,857 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:16,858 - server - INFO - 调用 Tool: open_project, 参数：{'project_name': 'pmms_rehearsal'}
+2026-09-30 21:29:17,439 - server - INFO - Tool 执行成功：open_project
+2026-09-30 21:29:17,442 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:17,443 - server - INFO - 调用 Tool: load_model, 参数：{'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'}
+2026-09-30 21:29:17,532 - server - INFO - Tool 执行成功：load_model
+2026-09-30 21:29:17,536 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:17,536 - server - INFO - 调用 Tool: list_available_models, 参数：{}
+2026-09-30 21:29:17,543 - server - INFO - Tool 执行成功：list_available_models
+2026-09-30 21:29:17,547 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:17,550 - server - INFO - 调用 Tool: add_model_source, 参数：{'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'}
+2026-09-30 21:29:18,336 - server - INFO - Tool 执行成功：add_model_source
+2026-09-30 21:29:18,339 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:18,342 - server - INFO - 调用 Tool: load_data, 参数：{'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'}
+2026-09-30 21:29:18,413 - server - INFO - Tool 执行成功：load_data
+2026-09-30 21:29:18,416 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:18,417 - server - INFO - 调用 Tool: build_filter_by_data, 参数：{'data_source_name': 'jia_iv'}
+2026-09-30 21:29:18,514 - server - INFO - Tool 执行成功：build_filter_by_data
+2026-09-30 21:29:18,517 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:18,518 - server - INFO - 调用 Tool: clear_views, 参数：{}
+2026-09-30 21:29:18,520 - server - INFO - Tool 执行成功：clear_views
+2026-09-30 21:29:18,522 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:18,528 - server - INFO - 调用 Tool: view, 参数：{'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N_3', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]}
+2026-09-30 21:29:18,570 - server - INFO - Tool 执行成功：view
+2026-09-30 21:29:18,574 - mcp.server.lowlevel.server - INFO - Processing request of type CallToolRequest
+2026-09-30 21:29:18,575 - server - INFO - 调用 Tool: get_view_group_error, 参数：{}
+2026-09-30 21:29:18,581 - server - INFO - Tool 执行成功：get_view_group_error
+2026-09-30 21:29:18,584 - grpc_client - INFO - 心跳线程已停止
+2026-09-30 21:29:18,584 - grpc_client - INFO - gRPC 连接已关闭
+2026-09-30 21:29:18,591 - meqlab_manager - INFO - ✓ MeQLab 进程 (PID: 38692) 已终止
+2026-09-30 21:29:18,592 - server - INFO - ✓ MeQLab 进程已停止
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ValueError: I/O operation on closed file.
+========== 目标1：官方 bin_model_demo_point_model view→error ==========
+--- [1] exist_project {'project_name': 'bin_model_demo_point_model'} -> ok=True code=None
+    工程存在：是
+--- [2] open_project {'project_name': 'bin_model_demo_point_model'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/bin_model_demo_point_model
+--- [3] list_filters {} -> ok=True code=None
+    Filter 列表 (共 10 个):
+      - IV_data(Sweep) (Ordinary Page)
+      - IV_data(Spec) (Spec vs Instance)
+      - IV_data(VbSpec) (Spec vs Instance)
+      - IV_data(ErrMonitor) (Spec Table)
+      - Cgg_data(Sweep) (Ordinary Page)
+      - Cgc_data(Sweep) (Ordinary Page)
+      - Spec_stress_effect(Spec) (Spec vs Instance)
+      - Spec_stress_effect(ErrMonitor) (Spec Table)
+      - WAT_data(Spec) (Spec vs Instance)
+      - WAT_data(ErrMonitor) (Spec Table)
+    
+--- [4] list_data_sources {} -> ok=True code=None
+    数据源列表:
+      - IV_data (ID: 0)
+      - Cgg_data (ID: 1)
+      - Cgc_data (ID: 2)
+      - Spec_data (ID: 3)
+      - Spec_stress_effect (ID: 4)
+      - WAT_data (ID: 5)
+    
+--- [5] get_data_detail {'data_source_name': 'IV_data'} -> ok=True code=None
+    数据详情:
+    名称：IV_data
+    类型：Mosfet
+    页数：64
+--- [6] get_view_group_error {} -> ok=False code=2
+    错误：Tool 执行失败，错误码：2，错误信息：no view group loaded, call view first
+--- [7] clear_views {} -> ok=True code=None
+    视图已清空
+--- [8] view {'view_fields': [{'filter_string': 'name,IV_data(Sweep)', 'source_string': 'IV_data, Binning1', 'page_string': 'id_vd', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [9] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 4 个视图）:
+      - (id_vd)Id_Vds@vbs=0.0@NMOS(W=0.3000 L=0.2500 T=25.00): error=0.014959786082024158
+      - (id_vd)Id_Vds@vbs=-2.5@NMOS(W=0.3000 L=0.2500 T=25.00): error=0.015429814851004146
+      - (id_vd)Id_Vds@vbs=0.0@NMOS(W=0.3000 L=1.000 T=25.00): error=7.193822626171954e-07
+      - (id_vd)Id_Vds@vbs=-2.5@NMOS(W=0.3000 L=1.000 T=25.00): error=9.374617136902932e-07
+    聚合误差：0.007597814444251153
+>>> filter='name,IV_data(Sweep)' page='id_vd' 判决=NUMBER
+
+########## 日志增量 @目标1 官方工程 view+error 之后 ##########
+--- info.log (+503B) ---
+[21:29:10][com.platformda.system.EditingProjectService][INFO] setEditingProject: /tmp/MeqlabProjects/bin_model_demo_point_model
+[21:29:11][com.platformda.extraction.workspace.Workspace][FINE] Done loading model suites (total time: 0.188 seconds)
+[21:29:11][com.platformda.extraction.ExtractionDAO][FINE] Done loading db (total time: 0.124 seconds)
+[21:29:11][com.platformda.extraction.workspace.Workspace][FINE] Done loading workspace.xml (total time: 0.584 seconds)
+
+--- warning.log: 无新增 (0B)
+--- severe.log: 无新增 (0B)
+--- messages.log: 无新增 (21241B)
+--- [10] dump_view_group {'path': '/tmp/p9_demo_view_group.xlsx'} -> ok=True code=None
+    视图组导出成功
+
+========== 目标2：jia + asmhemt 复现（网表捕获窗口）==========
+--- [11] exist_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程存在：是
+--- [12] open_project {'project_name': 'pmms_rehearsal'} -> ok=True code=None
+    工程打开成功
+    路径：/tmp/MeqlabProjects/pmms_rehearsal
+--- [13] load_model {'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc', 'format': 'hspice'} -> ok=True code=None
+    模型加载成功
+    路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    格式：hspice
+--- [14] list_available_models {} -> ok=True code=None
+    可用模型列表:
+      - ID: 0, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+      - ID: 1, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+      - ID: 2, 路径：/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_with_lib.inc
+    
+--- [15] add_model_source {'model_suite_id': 0, 'lib_name': 'tt', 'model_name': 'jiamod'} -> ok=True code=None
+    模型源添加成功（共 1 个）:
+      - 名称：jiamod_tt_N_3，模拟器：Nano
+    
+>>> 模型源: jiamod_tt_N_3
+--- [16] load_data {'data_type': 0, 'path': '/home/zhengjp2/projects/gan-hemt-agent/data/sim/jia_transfer.pms', 'data_source_name': 'jia_iv'} -> ok=True code=None
+    数据加载成功
+    名称：jia_iv
+    ID: 1
+--- [17] build_filter_by_data {'data_source_name': 'jia_iv'} -> ok=True code=None
+    Filter 构建成功
+--- [18] clear_views {} -> ok=True code=None
+    视图已清空
+--- [19] view {'view_fields': [{'filter_string': 'name,jia_iv', 'source_string': 'jia_iv, jiamod_tt_N_3', 'page_string': 'id_vg_vb', 'selection_string': 'xr(0,1)'}]} -> ok=True code=None
+    视图选择成功
+--- [20] get_view_group_error {} -> ok=True code=None
+    视图组误差（共 0 个视图）:
+    聚合误差：nan
+
+########## 日志增量 @目标2 jia view+error 之后 ##########
+--- info.log: 无新增 (21329B)
+--- warning.log: 无新增 (0B)
+--- severe.log: 无新增 (4736B)
+--- messages.log: 无新增 (21744B)
+
+===== P9 DONE: ledger.count=20 calls=20 | 目标1(官方工程)=NUMBER hit=('name,IV_data(Sweep)', 'id_vd') | 目标2(jia复现)=0VIEWS =====
